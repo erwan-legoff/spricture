@@ -16,6 +16,9 @@ public class Photo {
     @Nullable
     private String title;
 
+    public Photo() {
+    }
+
     public Photo(Long id, @Nullable String title, File file) {
         this.id = id;
         this.title = title;
