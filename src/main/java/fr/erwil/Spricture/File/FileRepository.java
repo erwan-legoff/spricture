@@ -1,6 +1,6 @@
 package fr.erwil.Spricture.File;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FileRepository extends CrudRepository<File, Long> {
+public interface FileRepository extends JpaRepository<File, Long> {
 }

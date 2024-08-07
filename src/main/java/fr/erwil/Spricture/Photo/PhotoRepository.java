@@ -1,6 +1,6 @@
 package fr.erwil.Spricture.Photo;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PhotoRepository extends CrudRepository<Photo, Long> {
+public interface PhotoRepository extends JpaRepository<Photo, Long> {
 }

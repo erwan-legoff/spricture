@@ -10,19 +10,22 @@ public class File {
     @Id
     Long id;
 
-    String filePath;
+    String path;
+
+    String name;
 
     public File(){
 
     }
 
-    public File(Long id, String filePath) {
+    public File(Long id, String path, String name) {
         this.id = id;
-        this.filePath = filePath;
+        this.path = path;
+        this.name = name;
     }
 
-    public File(String filePath) {
-        this.filePath = filePath;
+    public File(String path) {
+        this.path = path;
     }
 
     public Long getId() {
@@ -33,11 +36,23 @@ public class File {
         this.id = id;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getPath() {
+        return path;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFullPath(){
+        return path + "/" + name;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

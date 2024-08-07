@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PhotoService {
@@ -22,18 +23,31 @@ public class PhotoService {
         return photo.map(PhotoMapper::mapToPhotoDto);
 
     }
-    // Transactional mean that all operations are operated in one transaction
+
+    /**
+     * Create a photo and its corresponding file, and save them
+     * The transactional annotation means that if there is an error saving the file or the photo, it will cancel both,
+     * because it's a single DB operation
+     * @param photoDto the photo to be saved
+     * @return the created photo dto
+     */
     @Transactional
     public PhotoDto createPhoto(PhotoDto photoDto){
         Photo photo =  PhotoMapper.mapToPhoto(photoDto);
         File photoFile = photo.getFile();
 
         fileRepository.save(photoFile);
-
-        return PhotoMapper.mapToPhotoDto(photoRepository.save(photo));
+        PhotoDto createdPhoto = PhotoMapper.mapToPhotoDto(photoRepository.save(photo));
+        return createdPhoto;
     }
 
-    public Iterable<Photo> getAllPhotos(){
-        return photoRepository.findAll();
+    /**
+     * @return all photos
+     */
+    public Iterable<PhotoDto> getAllPhotos(){
+        Iterable<PhotoDto> photoDtos = photoRepository.findAll().stream() //allow to change records
+                .map(PhotoMapper::mapToPhotoDto)// mapping conversion
+                .collect(Collectors.toList()); // we want a list
+        return photoDtos;
     }
 }
