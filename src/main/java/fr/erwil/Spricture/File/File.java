@@ -24,8 +24,9 @@ public class File {
         this.name = name;
     }
 
-    public File(String path) {
+    public File(String path, String name) {
         this.path = path;
+        this.name = name;
     }
 
     public Long getId() {

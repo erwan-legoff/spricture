@@ -8,7 +8,7 @@ public class PhotoMapper {
         return new PhotoDto(photo.getId(), photo.getTitle(), photo.getFile().getPath());
     }
     public static Photo mapToPhoto(PhotoDto photoDto){
-        return new Photo(photoDto.getId(), photoDto.getTitle(), new File(photoDto.getFilePath()));
+        return new Photo(photoDto.getId(), photoDto.getTitle(), new File(photoDto.getFilePath(), photoDto.getTitle()));
     }
 
 }
