@@ -1,4 +1,4 @@
-package fr.erwil.Spricture.File;
+package fr.erwil.Spricture.Album;
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -6,36 +6,26 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-@Table(name = "media")
-@Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Medium {
-    @GeneratedValue(strategy = GenerationType.UUID)
+@Entity
+@Table(name = "albums")
+public class Album {
+    @GeneratedValue
     @Id
-    private UUID id;
-
-    private String name;
+    private Long id;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    private LocalDateTime deletedAt;
+
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
 
-    private LocalDateTime deletedAt;
+    private String title;
 
-    private LocalDateTime originallyCreatedAt;
-    
-    private String extension;
-
-    
-    public Medium(){
-
-    }
-
-
+    private String description;
 }
