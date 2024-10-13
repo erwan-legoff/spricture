@@ -41,6 +41,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @OneToMany(mappedBy = "owner_id")
     private List<Medium> media;
 
 }
