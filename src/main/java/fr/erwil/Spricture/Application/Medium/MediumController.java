@@ -12,6 +12,7 @@ import java.io.IOException;
 @RestController
 public class MediumController {
 private final IMediumService mediumService;
+
     public MediumController(IMediumService mediumService){
         this.mediumService=mediumService;
     }

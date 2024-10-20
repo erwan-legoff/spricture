@@ -2,5 +2,7 @@ package fr.erwil.Spricture.Application.Medium;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MediumRepository extends JpaRepository<Medium, Long> {
+import java.util.UUID;
+
+public interface IMediumRepository extends JpaRepository<Medium, UUID> {
 }
