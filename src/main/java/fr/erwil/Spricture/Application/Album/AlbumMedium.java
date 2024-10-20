@@ -1,6 +1,6 @@
-package fr.erwil.Spricture.Album;
+package fr.erwil.Spricture.Application.Album;
 
-import fr.erwil.Spricture.Medium.Medium;
+import fr.erwil.Spricture.Application.Medium.Medium;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

@@ -1,6 +1,6 @@
-package fr.erwil.Spricture.User;
+package fr.erwil.Spricture.Application.User;
 
-import fr.erwil.Spricture.Medium.Medium;
+import fr.erwil.Spricture.Application.Medium.Medium;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

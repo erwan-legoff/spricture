@@ -1,4 +1,4 @@
-package fr.erwil.Spricture.Medium;
+package fr.erwil.Spricture.Application.Medium;
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
