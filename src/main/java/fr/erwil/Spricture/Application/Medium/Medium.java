@@ -16,6 +16,8 @@ public class Medium {
     @Id
     private UUID id;
 
+    private Long ownerId;
+
     private String name;
 
     @CreatedDate
@@ -35,6 +37,10 @@ public class Medium {
     
     public Medium(){
 
+    }
+
+    public Medium(String name) {
+        this.name = name;
     }
 
     public void setDeletedAt(LocalDateTime deletedAt) {
