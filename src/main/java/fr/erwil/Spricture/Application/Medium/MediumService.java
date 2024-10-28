@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Service
 public class MediumService implements  IMediumService {
+
     private final IUuidFileStorage fileStorage;
     private final  IMediumRepository mediumRepository;
     public MediumService(UuidFileStorageSimple fileStorage, IMediumRepository mediumRepository){
@@ -25,22 +26,28 @@ public class MediumService implements  IMediumService {
     @Override
     public Medium create(MultipartFile multipartFile) throws MediumProcessingException {
         Medium mediumToCreate =  MediumMultipartFileAdaptor.getMedium(multipartFile);
-        assert mediumToCreate != null;
+
         Medium mediumCreated = mediumRepository.save(mediumToCreate);
 
         try {
-            fileStorage.save(multipartFile.getResource().getFile(), mediumCreated.getId());
+            fileStorage.save(multipartFile, mediumCreated.getId());
             return mediumCreated;
         } catch (IOException e) {
             SoftDeleteMediumDto softDeleteDto = SoftDeleteMediumAdaptor.getSoftDeleteMediumDto(mediumCreated);
+
             this.softDelete(softDeleteDto);
-            throw new MediumProcessingException("Error while creating the file : " + multipartFile.getOriginalFilename(), e.getCause());
+            throw new MediumProcessingException("Error while creating the file : " + multipartFile.getOriginalFilename(), e);
         }
     }
 
     @Override
-    public InputStream get(GetMediumDto getMediumDto) throws MediumProcessingException {
-        return fileStorage.read(getMediumDto.getId());
+    public InputStream getFile(GetMediumDto getMediumDto) throws MediumProcessingException {
+        try (InputStream file = fileStorage.read(getMediumDto.getId())) {
+        return  file;
+        }catch(IOException exception){
+            throw new MediumProcessingException("Error while reading this medium :" + getMediumDto.getId(), exception);
+        }
+
     }
 
     @Override
@@ -49,7 +56,7 @@ public class MediumService implements  IMediumService {
                 () -> new EntityNotFoundException("The medium " + softDeleteMediumDto.getId() + " was not found before soft delete")
         );
 
-        if(mediumToSoftDelete.getDeletedAt() == null){
+        if(mediumToSoftDelete.getDeletedAt() != null){
             throw new AlreadySoftDeletedException("the medium " + softDeleteMediumDto.getId() + " was already soft deleted");
         }
 

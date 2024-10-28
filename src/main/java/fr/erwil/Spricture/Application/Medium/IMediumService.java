@@ -13,7 +13,7 @@ import java.io.InputStream;
 
 public interface IMediumService {
     Medium create(MultipartFile multipartFile) throws MediumProcessingException;
-    InputStream get(GetMediumDto getMediumDto) throws EntityNotFoundException, MediumProcessingException;
+    InputStream getFile(GetMediumDto getMediumDto) throws EntityNotFoundException, MediumProcessingException;
     void softDelete(SoftDeleteMediumDto softDeleteMediumDto) throws EntityNotFoundException, AlreadySoftDeletedException;
     void fullDelete(FullDeleteMediumDto fullDeleteMediumDto) throws EntityNotFoundException, IOException;
 }
