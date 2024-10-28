@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class MediumMultipartFileAdaptor {
     static public Medium getMedium(MultipartFile multipartFile){
-        return  null;
+        return  new Medium(multipartFile.getOriginalFilename());
     }
 
 }
