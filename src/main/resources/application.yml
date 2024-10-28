@@ -1,7 +1,0 @@
-# Common properties that should not be changed
-spring:
-  jpa:
-    hibernate:
-      naming: # Java properties will be camelCased but stored in snake_cased SQL properties
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
