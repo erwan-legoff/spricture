@@ -8,6 +8,6 @@ public class SoftDeleteMediumAdaptor {
     }
 
     public static SoftDeleteMediumDto getSoftDeleteMediumDto(Medium medium){
-        return null;
+        return new SoftDeleteMediumDto(medium.getId());
     }
 }
