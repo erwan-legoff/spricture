@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -41,12 +42,15 @@ public class MediumService implements  IMediumService {
     }
 
     @Override
-    public InputStream getFile(GetMediumDto getMediumDto) throws MediumProcessingException {
-        try (InputStream file = fileStorage.read(getMediumDto.getId())) {
-        return  file;
-        }catch(IOException exception){
-            throw new MediumProcessingException("Error while reading this medium :" + getMediumDto.getId(), exception);
+    public File getFile(GetMediumDto getMediumDto) throws MediumProcessingException {
+        File file = null;
+        try {
+            file = fileStorage.read(getMediumDto.getId());
+        } catch (IOException e) {
+            throw new MediumProcessingException("Error while getting medium"+ getMediumDto.getId(),e);
         }
+        return  file;
+
 
     }
 

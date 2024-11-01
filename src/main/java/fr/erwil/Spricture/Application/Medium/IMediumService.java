@@ -8,12 +8,13 @@ import fr.erwil.Spricture.Exceptions.MediumProcessingException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 public interface IMediumService {
     Medium create(MultipartFile multipartFile) throws MediumProcessingException;
-    InputStream getFile(GetMediumDto getMediumDto) throws EntityNotFoundException, MediumProcessingException;
+    File getFile(GetMediumDto getMediumDto) throws EntityNotFoundException, MediumProcessingException;
     void softDelete(SoftDeleteMediumDto softDeleteMediumDto) throws EntityNotFoundException, AlreadySoftDeletedException;
     void fullDelete(FullDeleteMediumDto fullDeleteMediumDto) throws EntityNotFoundException, IOException;
 }

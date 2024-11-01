@@ -10,6 +10,6 @@ import java.util.UUID;
 
 public interface IUuidFileStorage {
     boolean save(MultipartFile file, UUID uuid) throws FileAlreadyExistsException, IOException;
-    InputStream read(UUID uuid);
+    File read(UUID uuid) throws IOException;
     void delete(UUID uuid);
 }
