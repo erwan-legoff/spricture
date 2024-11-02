@@ -3,7 +3,6 @@ package fr.erwil.Spricture.Application.Medium;
 import fr.erwil.Spricture.Application.Medium.Dtos.GetMediumDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import org.apache.catalina.webresources.FileResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamResource;
@@ -14,10 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.UUID;
 
 @RestController
@@ -54,14 +51,14 @@ public class MediumController {
         logger.info("Received request to get a medium");
         try {
             GetMediumDto getMediumDto = new GetMediumDto(UUID.fromString(id));
-            File mediumFile =  mediumService.getFile(getMediumDto);
+            Path mediumFile =  mediumService.getFile(getMediumDto);
 
             MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
 
             return ResponseEntity.ok()
-                    .contentLength(mediumFile.length())
+                    .contentLength(Files.size(mediumFile))
                     .contentType(mediaType)
-                    .body(new InputStreamResource(Files.newInputStream(mediumFile.toPath())));
+                    .body(new InputStreamResource(Files.newInputStream(mediumFile)));
         }catch (Exception e) {
             logger.error("An unexpected error occurred while getting a medium", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

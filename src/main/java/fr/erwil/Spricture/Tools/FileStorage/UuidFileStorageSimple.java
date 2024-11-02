@@ -9,7 +9,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @Service
@@ -17,7 +16,9 @@ public class UuidFileStorageSimple implements IUuidFileStorage{
     private final Path root;
 
     private Path getPath(UUID uuid){
-        return Paths.get(this.root.toString(), uuid.toString());
+        Path path = Paths.get(this.root.toString(), uuid.toString()).toAbsolutePath().normalize();
+        if(!path.getParent().equals(root.toAbsolutePath())) throw new SecurityException("Error while creating path, the parent is not the root");
+        return path;
     }
     public UuidFileStorageSimple(@Value("${file.storage.location}") String storageLocation) {
         this.root = Paths.get(storageLocation).toAbsolutePath().normalize();
@@ -41,11 +42,11 @@ public class UuidFileStorageSimple implements IUuidFileStorage{
     }
 
     @Override
-    public File read(UUID uuid) throws FileNotFoundException {
-        Path filePath = this.getPath(uuid);
-        if(!Files.exists(filePath)) throw new FileNotFoundException("Error while reading the file named "+ uuid);
+    public Path read(UUID uuid) throws FileNotFoundException {
+        Path file = this.getPath(uuid);
+        if(!Files.exists(file)) throw new FileNotFoundException("Error while reading the file named "+ uuid);
 
-        return filePath.toFile();
+        return file;
     }
 
     @Override
