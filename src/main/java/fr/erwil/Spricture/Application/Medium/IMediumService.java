@@ -10,10 +10,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Collection;
+import java.util.List;
 
 public interface IMediumService {
     Medium create(MultipartFile multipartFile) throws MediumProcessingException;
     Path getFile(GetMediumDto getMediumDto) throws EntityNotFoundException, MediumProcessingException;
+    List<Medium> getMedia();
     void softDelete(SoftDeleteMediumDto softDeleteMediumDto) throws EntityNotFoundException, AlreadySoftDeletedException;
     void fullDelete(FullDeleteMediumDto fullDeleteMediumDto) throws EntityNotFoundException, IOException;
 }

@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class MediumService implements  IMediumService {
@@ -51,6 +53,11 @@ public class MediumService implements  IMediumService {
         return  file;
 
 
+    }
+
+    @Override
+    public List<Medium> getMedia() {
+        return mediumRepository.findAll();
     }
 
     @Override

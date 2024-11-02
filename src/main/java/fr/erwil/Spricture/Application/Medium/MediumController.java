@@ -12,10 +12,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 public class MediumController {
@@ -28,7 +32,7 @@ public class MediumController {
     }
 
     @PostMapping("/media")
-    public ResponseEntity<Medium> createMedium(@RequestParam("medium") @NotNull @NotEmpty MultipartFile medium) {
+    public ResponseEntity<Medium> createMedium(@RequestParam("medium") @NotNull  MultipartFile medium) {
         logger.info("Received request to create new medium");
         try {
 
@@ -47,7 +51,7 @@ public class MediumController {
     }
 
     @GetMapping("/medium")
-    public ResponseEntity<Resource> getMedia(@RequestParam("id") @NotNull @NotEmpty String id){
+    public ResponseEntity<Resource> getMedium(@RequestParam("id") @NotNull @NotEmpty String id){
         logger.info("Received request to get a medium");
         try {
             GetMediumDto getMediumDto = new GetMediumDto(UUID.fromString(id));
@@ -59,6 +63,23 @@ public class MediumController {
                     .contentLength(Files.size(mediumFile))
                     .contentType(mediaType)
                     .body(new InputStreamResource(Files.newInputStream(mediumFile)));
+        }catch (Exception e) {
+            logger.error("An unexpected error occurred while getting a medium", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/media")
+    public ResponseEntity<List<URI>> getMedia(){
+        logger.info("Received request to get all media");
+        try {
+            List<Medium> media =  mediumService.getMedia();
+            logger.info("length {}", media.size());
+            logger.info(media.toString());
+          List<URI> uris =  media.stream().map(medium -> MvcUriComponentsBuilder.fromMethodName(MediumController.class, "getMedium", medium.getId().toString()).build().toUri()).collect(Collectors.toList());
+
+            return ResponseEntity.ok(uris);
+
         }catch (Exception e) {
             logger.error("An unexpected error occurred while getting a medium", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
