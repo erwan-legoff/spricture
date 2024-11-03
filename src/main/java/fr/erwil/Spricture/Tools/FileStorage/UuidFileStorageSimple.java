@@ -1,8 +1,10 @@
 package fr.erwil.Spricture.Tools.FileStorage;
 
 import fr.erwil.Spricture.Exceptions.UuidFileStorage.FileAlreadyExistsException;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -52,6 +54,11 @@ public class UuidFileStorageSimple implements IUuidFileStorage{
     @Override
     public void delete(UUID uuid) {
 
+    }
+
+    @Override
+    public void deleteAll() throws IOException {
+        FileUtils.cleanDirectory(root.toFile());
     }
 }
 

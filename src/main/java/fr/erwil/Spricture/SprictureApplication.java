@@ -1,5 +1,7 @@
 package fr.erwil.Spricture;
 
+import fr.erwil.Spricture.Tools.FileStorage.IUuidFileStorage;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -35,6 +37,13 @@ public class SprictureApplication {
 						.allowedMethods("POST", "GET", "OPTIONS", "DELETE");
 			}
 		};
+	}
+
+	@Bean
+	public CommandLineRunner applicationInitialization(IUuidFileStorage fileStorage){
+		return (args) -> {
+			fileStorage.deleteAll();
+		} ;
 	}
 
 }
