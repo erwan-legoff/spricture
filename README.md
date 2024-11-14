@@ -42,6 +42,11 @@ It will enable the client to get a particular medium, or to delete/softDelete it
 
 Futur methods will take a user id and/or an album id, with the good permission, to provide only what the user can see.
 
+#### Medium DTOs
+Each DTO is used to represent the data sent to or received from the Front End.
+
+There are adaptators used to "convert" between classes, they're implemented when needed.
+
 ### User
 A basic way to store user info, right now there is no service to create a user.
 
