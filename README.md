@@ -5,13 +5,19 @@ You can use it at your own risk but I can't provide any garanty whatsoever.
 
 # Introduction
 The main goal of this project is to have a server that can store photos encrypted in the client-side, so that the server has the minimum privacy responsability.
+
+It's meant to be paired with my project named photone, which is a Nuxt 3 Frontend.
+
+The photos will be encrypted *BEFORE* sending it to the server, so that your privacy will be preserved.
+
 In the end, the photos will be organized by album and groups. 
 
 You'll be able to have as many spaces (Family / Friends / Work / Someone ) as group you create.
-You will be able to add tags to organize your photos. 
+
+You'll be able to add tags to organize your photos. 
 
 And maybe eventually a local AI could locally and privately extract more metadata to greatly improve search accuracy.
-The photos will be encrypted BEFORE sending it to the server, so that your privacy will be preserved.
+
 
 # Architectural presentation
 
