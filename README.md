@@ -34,5 +34,5 @@ A user will have different role on different photos/album (depending of the choi
 
 ### Album
 An album has basic info that can help grouping photos. 
-An Album has a many-to-many relationship with a Medium.
-
+An Album has a many-to-many relationship with a Medium, 
+this is represented by the AlbumMedium entity with some non-repudiation fields.
