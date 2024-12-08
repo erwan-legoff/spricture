@@ -1,7 +1,6 @@
 package fr.erwil.Spricture.Application.Medium;
 
 import fr.erwil.Spricture.Application.Medium.Dtos.GetMediumDto;
-import fr.erwil.Spricture.Exceptions.MediumNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,10 +43,10 @@ public class MediumControllerTest {
         Path tempFile = Files.createTempFile(fileName,"");
         Files.writeString(tempFile, "test");
 
-        Mockito.doReturn(tempFile).when(mediumService).getMediumResource(dtoWithId(uuid));
+        Mockito.doReturn(tempFile).when(mediumService).getFile(dtoWithId(uuid));
         ResponseEntity<Resource> result = mediumController.getMedium(fileName);
 
-        Mockito.verify(mediumService, Mockito.times(1)).getMediumResource(dtoWithId(uuid));
+        Mockito.verify(mediumService, Mockito.times(1)).getFile(dtoWithId(uuid));
         Assertions.assertNotNull(result.getBody());
         assertEquals(HttpStatus.OK, result.getStatusCode());
 
