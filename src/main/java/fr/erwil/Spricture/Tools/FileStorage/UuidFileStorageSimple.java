@@ -14,7 +14,6 @@ import java.util.UUID;
 @Service
 public class UuidFileStorageSimple implements IUuidFileStorage{
     private final Path root;
-    private final String DEFAULT_STORAGE_LOCATION = "./medias";
 
     private Path getPath(UUID uuid){
         Path path = Paths.get(this.root.toString(), uuid.toString()).toAbsolutePath().normalize();
