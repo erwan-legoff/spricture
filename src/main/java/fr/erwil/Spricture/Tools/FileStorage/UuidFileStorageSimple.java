@@ -2,9 +2,7 @@ package fr.erwil.Spricture.Tools.FileStorage;
 
 import fr.erwil.Spricture.Exceptions.UuidFileStorage.FileAlreadyExistsException;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -16,14 +14,16 @@ import java.util.UUID;
 @Service
 public class UuidFileStorageSimple implements IUuidFileStorage{
     private final Path root;
+    private final String DEFAULT_STORAGE_LOCATION = "./medias";
 
     private Path getPath(UUID uuid){
         Path path = Paths.get(this.root.toString(), uuid.toString()).toAbsolutePath().normalize();
         if(!path.getParent().equals(root.toAbsolutePath())) throw new SecurityException("Error while creating path, the parent is not the root");
         return path;
     }
-    public UuidFileStorageSimple(@Value("${file.storage.location}") String storageLocation) {
-        this.root = Paths.get(storageLocation).toAbsolutePath().normalize();
+    public UuidFileStorageSimple(FileStorageProperties properties) {
+
+        this.root = Paths.get(properties.getLocation()).toAbsolutePath().normalize();
 
         try {
             Files.createDirectories(this.root);
