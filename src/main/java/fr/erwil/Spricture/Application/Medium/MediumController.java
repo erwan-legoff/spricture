@@ -31,6 +31,11 @@ public class MediumController {
         this.mediumService=mediumService;
     }
 
+    @RequestMapping("/hello")
+    public @ResponseBody String greeting() {
+        return "Hello World!";
+    }
+
     @PostMapping("/media")
     public ResponseEntity<Medium> createMedium(@RequestParam("medium") @NotNull  MultipartFile medium) {
         logger.info("Received request to create new medium");
