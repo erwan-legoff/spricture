@@ -1,5 +1,6 @@
 package fr.erwil.Spricture.Application.Medium;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.erwil.Spricture.Application.Medium.Dtos.GetMediumDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -8,24 +9,30 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import java.io.IOException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(MockitoExtension.class) // say to Spring that I use Mockito
+@SpringBootTest
+@AutoConfigureMockMvc
 public class MediumControllerTest {
-    @InjectMocks
-    MediumController mediumController;
 
-    @Mock
+    @MockBean
     IMediumService mediumService; // The service is needed for the controller
+
+    @Autowired
+    private MockMvc mockMvc;
 
     private static GetMediumDto dtoWithId(UUID uuid) {
         return Mockito.argThat(dto -> dto.getId().equals(uuid));
@@ -34,7 +41,7 @@ public class MediumControllerTest {
 
 
     @Test
-    void getMediumReturnsTheFileItReceivedAndSucceed() throws IOException {
+    void getMediumReturnsTheFileItReceivedAndSucceed() throws Exception {
 
 
 
@@ -44,15 +51,21 @@ public class MediumControllerTest {
         Files.writeString(tempFile, "test");
 
         Mockito.doReturn(tempFile).when(mediumService).getFile(dtoWithId(uuid));
-        ResponseEntity<Resource> result = mediumController.getMedium(fileName);
+
+        MvcResult result = mockMvc.perform(get("/medium").param("id",fileName))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String responseBody = result.getResponse().getContentAsString();
 
         Mockito.verify(mediumService, Mockito.times(1)).getFile(dtoWithId(uuid));
-        Assertions.assertNotNull(result.getBody());
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        Assertions.assertNotNull(responseBody);
+
 
         String fileContentExpected = Files.readString(tempFile);
-        String actualFileContent = new String(result.getBody().getInputStream().readAllBytes());
-        assertEquals(fileContentExpected, actualFileContent);
+
+        assertEquals(fileContentExpected, responseBody);
 
 
         Files.deleteIfExists(tempFile);
