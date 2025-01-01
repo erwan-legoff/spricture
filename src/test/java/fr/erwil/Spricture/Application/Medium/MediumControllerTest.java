@@ -43,8 +43,6 @@ public class MediumControllerTest {
     @Test
     void getMediumReturnsTheFileItReceivedAndSucceed() throws Exception {
 
-
-
         UUID uuid = new UUID(1,1);
         String fileName = uuid.toString();
         Path tempFile = Files.createTempFile(fileName,"");
