@@ -58,20 +58,14 @@ public class MediumController {
     @GetMapping("/medium")
     public ResponseEntity<Resource> getMedium(@RequestParam("id") @NotNull @NotEmpty String id){
         logger.info("Received request to get a medium");
-        try {
             GetMediumDto getMediumDto = new GetMediumDto(UUID.fromString(id));
-            Path mediumFile =  mediumService.getFile(getMediumDto);
+            InputStreamResource resource =  mediumService.getFile(getMediumDto);
 
             MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
 
             return ResponseEntity.ok()
-                    .contentLength(Files.size(mediumFile))
                     .contentType(mediaType)
-                    .body(new InputStreamResource(Files.newInputStream(mediumFile)));
-        }catch (Exception e) {
-            logger.error("An unexpected error occurred while getting a medium", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+                    .body(resource);
     }
 
     @GetMapping("/media")

@@ -2,17 +2,20 @@ package fr.erwil.Spricture.Application.Medium;
 
 import fr.erwil.Spricture.Application.Medium.Dtos.*;
 import fr.erwil.Spricture.Exceptions.AlreadySoftDeletedException;
-import fr.erwil.Spricture.Exceptions.MediumProcessingException;
+import fr.erwil.Spricture.Exceptions.Medium.MediumNotFoundException;
+import fr.erwil.Spricture.Exceptions.Medium.MediumProcessingException;
 import fr.erwil.Spricture.Tools.FileStorage.IUuidFileStorage;
 import fr.erwil.Spricture.Tools.FileStorage.UuidFileStorageSimple;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -43,14 +46,20 @@ public class MediumService implements  IMediumService {
     }
 
     @Override
-    public Path getFile(GetMediumDto getMediumDto) throws MediumProcessingException {
+    public InputStreamResource getFile(GetMediumDto getMediumDto) throws MediumProcessingException {
         Path file = null;
+        InputStreamResource resource = null;
         try {
             file = fileStorage.read(getMediumDto.getId());
-        } catch (IOException e) {
+            resource = new InputStreamResource(Files.newInputStream(file));
+        }
+        catch (FileNotFoundException e){
+            throw new MediumNotFoundException("Medium "+ getMediumDto.getId() + " Not found",e);
+        }
+        catch (IOException e) {
             throw new MediumProcessingException("Error while getting medium"+ getMediumDto.getId(),e);
         }
-        return  file;
+        return  resource;
 
 
     }

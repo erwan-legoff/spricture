@@ -1,12 +1,11 @@
 package fr.erwil.Spricture.Exceptions;
 
+import fr.erwil.Spricture.Exceptions.Medium.MediumNotFoundException;
+import fr.erwil.Spricture.Exceptions.Medium.MediumProcessingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.io.IOException;
 
 @RestControllerAdvice
 public class GlobalExceptionsHandler {
@@ -20,7 +19,11 @@ public class GlobalExceptionsHandler {
                 .body("Erreur lors du traitement du fichier : " + processingException.getMessage());
     }
 
-
-    // Tu peux ajouter d'autres gestionnaires pour différentes exceptions ici
+    @ExceptionHandler(MediumNotFoundException.class)
+    public ResponseEntity<String> handleMediumNotFoundException(MediumNotFoundException processingException) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body("MEDIUM NOT FOUND : " + processingException.getMessage());
+    }
 
 }
