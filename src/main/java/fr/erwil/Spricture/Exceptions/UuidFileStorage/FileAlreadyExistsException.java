@@ -1,10 +1,11 @@
 package fr.erwil.Spricture.Exceptions.UuidFileStorage;
 
+import fr.erwil.Spricture.Exceptions.BaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-public class FileAlreadyExistsException extends RuntimeException {
+public class FileAlreadyExistsException extends BaseException {
     public FileAlreadyExistsException(String message){
         super(message);
     }
