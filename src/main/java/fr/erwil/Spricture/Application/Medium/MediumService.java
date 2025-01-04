@@ -84,6 +84,13 @@ public class MediumService implements  IMediumService {
 
     @Override
     public void fullDelete(FullDeleteMediumDto fullDeleteMediumDto) throws MediumProcessingException {
-        fileStorage.delete(fullDeleteMediumDto.getId());
+        try {
+            fileStorage.delete(fullDeleteMediumDto.getId());
+        } catch (IOException e) {
+            throw new MediumProcessingException("Error while fulldeleting "+fullDeleteMediumDto.getId(), e);
+        } catch (Exception e){
+            throw new RuntimeException("unexpected error while fulldeleting"+fullDeleteMediumDto.getId());
+        }
+
     }
 }
