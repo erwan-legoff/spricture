@@ -43,6 +43,11 @@ public class Medium {
         this.name = name;
     }
 
+    public Medium(UUID id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public void setDeletedAt(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
     }
