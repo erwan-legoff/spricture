@@ -51,8 +51,9 @@ public class UuidFileStorageSimple implements IUuidFileStorage{
     }
 
     @Override
-    public void delete(UUID uuid) {
-
+    public void delete(UUID uuid) throws IOException {
+        Path file = this.getPath(uuid);
+        Files.deleteIfExists(file);
     }
 
     @Override
