@@ -1,6 +1,7 @@
 package fr.erwil.Spricture.Application.Medium;
 
 import fr.erwil.Spricture.Application.Medium.Dtos.GetMediumDto;
+import fr.erwil.Spricture.Exceptions.Medium.MediumNotFoundException;
 import fr.erwil.Spricture.Tools.FileStorage.UuidFileStorageSimple;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -57,6 +59,17 @@ class MediumServiceTest {
         }finally {
             Files.deleteIfExists(tempFile);
         }
+
+    }
+
+    @Test
+    void getMediumResourceShouldThrowMediumNotFoundException() throws IOException {
+        UUID uuid = new UUID(1, 1);
+        GetMediumDto getMediumDto = new GetMediumDto(uuid);
+
+        Mockito.doThrow(FileNotFoundException.class).when(fileStorage).read(uuid);
+
+        assertThrows(MediumNotFoundException.class, () -> mediumService.getFile(getMediumDto));
 
 
     }
