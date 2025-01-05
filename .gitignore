@@ -3,7 +3,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
+### default media file locations ###
+/medias
 ### STS ###
 .apt_generated
 .classpath
