@@ -9,3 +9,5 @@ spring.servlet.multipart.max-request-size=20MB
 
 # File storage location
 file.storage.location=./medias
+
+logging.level.org.springframework.web=DEBUG

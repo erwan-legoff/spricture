@@ -1,6 +1,7 @@
 package fr.erwil.Spricture;
 
 import fr.erwil.Spricture.Tools.FileStorage.IUuidFileStorage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +18,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableJpaAuditing
 @SpringBootApplication()
 public class SprictureApplication {
+	@Value("${cors.allowed.origins}")
+	private String allowedOrigins;
 
 	@RequestMapping("/")
 	String home(){
@@ -32,9 +35,11 @@ public class SprictureApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")  // Utiliser "/**" pour appliquer CORS à toutes les routes
-						.allowedOriginPatterns("http://localhost:*")  // Autoriser tous les ports de localhost
-						.allowedMethods("POST", "GET", "OPTIONS", "DELETE");
+				registry.addMapping("/**")
+						.allowedOrigins(allowedOrigins)
+						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+						.allowedHeaders("Authorization", "Content-Type")
+						.allowCredentials(true);
 			}
 		};
 	}
