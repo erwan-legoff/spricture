@@ -28,6 +28,7 @@ public class MediumService implements  IMediumService {
         this.mediumRepository = mediumRepository;
     }
 
+    @Transactional
     @Override
     public Medium create(MultipartFile multipartFile) throws MediumProcessingException {
         Medium mediumToCreate =  MediumMultipartFileAdaptor.getMedium(multipartFile);
