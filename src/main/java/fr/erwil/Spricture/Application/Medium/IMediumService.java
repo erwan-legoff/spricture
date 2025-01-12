@@ -1,5 +1,6 @@
 package fr.erwil.Spricture.Application.Medium;
 
+import fr.erwil.Spricture.Application.Medium.Dtos.CreateManyResponseDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.FullDeleteMediumDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.GetMediumDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.SoftDeleteMediumDto;
@@ -16,6 +17,7 @@ import java.util.List;
 
 public interface IMediumService {
     Medium create(MultipartFile multipartFile) throws MediumProcessingException;
+    CreateManyResponseDto createMany(List<MultipartFile> multipartFiles) throws MediumProcessingException;
     InputStreamResource getFile(GetMediumDto getMediumDto) throws MediumException;
     List<Medium> getMedia();
     void softDelete(SoftDeleteMediumDto softDeleteMediumDto) throws EntityNotFoundException, AlreadySoftDeletedException;

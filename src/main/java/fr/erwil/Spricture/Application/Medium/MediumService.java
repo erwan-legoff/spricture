@@ -7,6 +7,9 @@ import fr.erwil.Spricture.Exceptions.Medium.MediumProcessingException;
 import fr.erwil.Spricture.Tools.FileStorage.IUuidFileStorage;
 import fr.erwil.Spricture.Tools.FileStorage.UuidFileStorageSimple;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,11 +19,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class MediumService implements  IMediumService {
 
+    private static final Logger log = LogManager.getLogger(MediumService.class);
     private final IUuidFileStorage fileStorage;
     private final  IMediumRepository mediumRepository;
     public MediumService(UuidFileStorageSimple fileStorage, IMediumRepository mediumRepository){
@@ -44,6 +50,25 @@ public class MediumService implements  IMediumService {
             this.softDelete(softDeleteDto);
             throw new MediumProcessingException("Error while creating the file : " + multipartFile.getOriginalFilename(), e);
         }
+    }
+
+
+    @Override
+    public CreateManyResponseDto createMany(List<MultipartFile> multipartFiles) throws MediumProcessingException {
+        List<Medium> createdMedia = new ArrayList<>();
+        List<String> notCreatedFileNames = new ArrayList<>();
+        for(MultipartFile file : multipartFiles){
+            try {
+                Medium medium = this.create(file);
+                createdMedia.add(medium);
+            } catch (Exception e) {
+                log.warn("{} medium was not created because of this error: {}", file.getOriginalFilename(), e.getMessage(), e);
+                notCreatedFileNames.add(file.getOriginalFilename());
+            }
+        }
+
+
+        return new CreateManyResponseDto(createdMedia, notCreatedFileNames);
     }
 
     @Override
@@ -76,26 +101,28 @@ public class MediumService implements  IMediumService {
                 () -> new EntityNotFoundException("The medium " + softDeleteMediumDto.getId() + " was not found before soft delete")
         );
 
-        if(mediumToSoftDelete.getDeletedAt() != null){
+        if (mediumToSoftDelete.getDeletedAt() != null) {
             throw new AlreadySoftDeletedException("the medium " + softDeleteMediumDto.getId() + " was already soft deleted");
         }
 
         mediumToSoftDelete.setDeletedAt(LocalDateTime.now());
+
     }
 
     @Override
     public void fullDelete(FullDeleteMediumDto fullDeleteMediumDto) throws MediumProcessingException {
         try {
             UUID mediumId = fullDeleteMediumDto.getId();
-            if(mediumRepository.existsById(mediumId)){
+            if (mediumRepository.existsById(mediumId)) {
                 mediumRepository.deleteById(mediumId);
             }
             fileStorage.delete(mediumId);
         } catch (IOException e) {
-            throw new MediumProcessingException("Error while fulldeleting "+fullDeleteMediumDto.getId(), e);
-        } catch (Exception e){
-            throw new RuntimeException("unexpected error while fulldeleting"+fullDeleteMediumDto.getId());
+            throw new MediumProcessingException("Error while fulldeleting " + fullDeleteMediumDto.getId(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("unexpected error while fulldeleting" + fullDeleteMediumDto.getId());
         }
-
     }
+
+
 }
