@@ -1,5 +1,6 @@
 package fr.erwil.Spricture.Application.Album;
 
+import fr.erwil.Spricture.Application.AbstractEntity;
 import fr.erwil.Spricture.Application.Medium.Medium;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -7,10 +8,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "album_media")
-public class AlbumMedium {
+public class AlbumMedium extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +23,4 @@ public class AlbumMedium {
     @JoinColumn(name = "medium_id", nullable = false)
     private Medium medium;
 
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime addedAt;
 }
