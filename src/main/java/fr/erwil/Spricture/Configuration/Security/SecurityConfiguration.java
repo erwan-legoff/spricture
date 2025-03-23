@@ -1,4 +1,4 @@
-package fr.erwil.Spricture.Configuration;
+package fr.erwil.Spricture.Configuration.Security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
