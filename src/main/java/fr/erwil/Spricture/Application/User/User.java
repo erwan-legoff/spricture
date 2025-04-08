@@ -13,6 +13,14 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 public class User {
+
+    public User() {}
+
+    @PrePersist
+    public void prePersist() {
+        if (this.role == null) this.role = UserRole.USER;
+    }
+
     @Id
     @GeneratedValue
     private Long id;
@@ -43,5 +51,30 @@ public class User {
 
     @OneToMany(mappedBy = "ownerId")
     private List<Medium> media;
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPseudo() {
+        return pseudo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public List<Medium> getMedia() {
+        return media;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
 
 }
