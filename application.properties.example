@@ -1,4 +1,11 @@
 # Application configuration example
+spring.application.name=Spricture
+spring.jpa.hibernate.ddl-auto=create
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.datasource.url=jdbc:postgresql://localhost:5432/spricture
+spring.datasource.username=spricture
+spring.datasource.password=
+
 
 # CORS - Allowed origins for the frontend
 cors.allowed.origins=http://localhost:3000
