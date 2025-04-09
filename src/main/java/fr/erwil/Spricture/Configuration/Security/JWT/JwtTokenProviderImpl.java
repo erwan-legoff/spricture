@@ -9,10 +9,12 @@ import io.jsonwebtoken.security.SecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+@Component
 public class JwtTokenProviderImpl implements IJwtTokenProvider {
 
     private final long jwtExpirationMilliseconds;
