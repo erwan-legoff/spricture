@@ -1,6 +1,5 @@
 package fr.erwil.Spricture.Configuration.Security.JWT;
 
-import fr.erwil.Spricture.Configuration.Security.JwtAuthService;
 import fr.erwil.Spricture.Configuration.Security.Dtos.JwtLoginResponseDto;
 import fr.erwil.Spricture.Configuration.Security.Dtos.LoginDto;
 import fr.erwil.Spricture.Configuration.Security.IAuthService;

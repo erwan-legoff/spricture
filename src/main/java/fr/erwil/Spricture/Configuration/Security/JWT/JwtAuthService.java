@@ -1,7 +1,7 @@
-package fr.erwil.Spricture.Configuration.Security;
+package fr.erwil.Spricture.Configuration.Security.JWT;
 
 import fr.erwil.Spricture.Configuration.Security.Dtos.LoginDto;
-import fr.erwil.Spricture.Configuration.Security.JWT.IJwtTokenProvider;
+import fr.erwil.Spricture.Configuration.Security.IAuthService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
