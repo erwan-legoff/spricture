@@ -24,8 +24,14 @@ import org.springframework.stereotype.Component;
 @EnableMethodSecurity
 public class SecurityConfiguration {
     private UserDetailsService userDetailsService;
-    private JwtAuthenticationEndpoint authenticationEndpoint;
-    private JwtAuthenticationFilter authenticationFilter;
+    private final JwtAuthenticationEndpoint authenticationEndpoint;
+    private final JwtAuthenticationFilter authenticationFilter;
+
+    public SecurityConfiguration(UserDetailsService userDetailsService, JwtAuthenticationEndpoint authenticationEndpoint, JwtAuthenticationFilter authenticationFilter) {
+        this.userDetailsService = userDetailsService;
+        this.authenticationEndpoint = authenticationEndpoint;
+        this.authenticationFilter = authenticationFilter;
+    }
 
     @Bean
     public static PasswordEncoder passwordEncoder(){
