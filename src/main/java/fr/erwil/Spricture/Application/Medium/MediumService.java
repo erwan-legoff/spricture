@@ -1,11 +1,11 @@
 package fr.erwil.Spricture.Application.Medium;
 
-import fr.erwil.Spricture.Application.Medium.Dtos.Adapter.MediumMultipartFileAdapter;
-import fr.erwil.Spricture.Application.Medium.Dtos.Adapter.SoftDeleteMediumAdapter;
-import fr.erwil.Spricture.Application.Medium.Dtos.Request.FullDeleteMediumDto;
-import fr.erwil.Spricture.Application.Medium.Dtos.Request.GetMediumDto;
-import fr.erwil.Spricture.Application.Medium.Dtos.Request.SoftDeleteMediumDto;
-import fr.erwil.Spricture.Application.Medium.Dtos.Response.CreateManyResponseDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Adapters.MediumMultipartFileAdapter;
+import fr.erwil.Spricture.Application.Medium.Dtos.Adapters.SoftDeleteMediumAdapter;
+import fr.erwil.Spricture.Application.Medium.Dtos.Requests.FullDeleteMediumDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Requests.GetMediumDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Requests.SoftDeleteMediumDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Responses.CreateManyResponseDto;
 import fr.erwil.Spricture.Exceptions.AlreadySoftDeletedException;
 import fr.erwil.Spricture.Exceptions.Medium.MediumNotFoundException;
 import fr.erwil.Spricture.Exceptions.Medium.MediumProcessingException;

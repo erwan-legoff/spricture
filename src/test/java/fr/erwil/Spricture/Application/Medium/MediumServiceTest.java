@@ -1,6 +1,6 @@
 package fr.erwil.Spricture.Application.Medium;
 
-import fr.erwil.Spricture.Application.Medium.Dtos.Request.GetMediumDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Requests.GetMediumDto;
 import fr.erwil.Spricture.Exceptions.Medium.MediumNotFoundException;
 import fr.erwil.Spricture.Tools.FileStorage.UuidFileStorageSimple;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package fr.erwil.Spricture.Application.Medium.Dtos.Response;
+package fr.erwil.Spricture.Application.Medium.Dtos.Responses;
 
 import fr.erwil.Spricture.Application.Medium.Medium;
 

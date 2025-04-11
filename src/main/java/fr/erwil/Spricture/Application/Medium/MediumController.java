@@ -1,7 +1,7 @@
 package fr.erwil.Spricture.Application.Medium;
 
-import fr.erwil.Spricture.Application.Medium.Dtos.Response.CreateManyResponseDto;
-import fr.erwil.Spricture.Application.Medium.Dtos.Request.GetMediumDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Responses.CreateManyResponseDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Requests.GetMediumDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;

@@ -1,6 +1,6 @@
-package fr.erwil.Spricture.Application.Medium.Dtos.Adapter;
+package fr.erwil.Spricture.Application.Medium.Dtos.Adapters;
 
-import fr.erwil.Spricture.Application.Medium.Dtos.Request.SoftDeleteMediumDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Requests.SoftDeleteMediumDto;
 import fr.erwil.Spricture.Application.Medium.Medium;
 
 public class SoftDeleteMediumAdapter {

@@ -1,4 +1,4 @@
-package fr.erwil.Spricture.Application.Medium.Dtos.Request;
+package fr.erwil.Spricture.Application.Medium.Dtos.Requests;
 
 import java.util.UUID;
 

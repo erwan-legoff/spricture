@@ -1,6 +1,6 @@
-package fr.erwil.Spricture.Application.Medium.Dtos.Adapter;
+package fr.erwil.Spricture.Application.Medium.Dtos.Adapters;
 
-import fr.erwil.Spricture.Application.Medium.Dtos.Request.GetMediumDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Requests.GetMediumDto;
 import fr.erwil.Spricture.Application.Medium.Medium;
 
 public class GetMediumAdapter {

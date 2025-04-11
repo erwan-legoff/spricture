@@ -1,4 +1,4 @@
-package fr.erwil.Spricture.Application.Medium.Dtos.Adapter;
+package fr.erwil.Spricture.Application.Medium.Dtos.Adapters;
 
 import fr.erwil.Spricture.Application.Medium.Medium;
 import org.springframework.web.multipart.MultipartFile;

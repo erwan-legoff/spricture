@@ -16,6 +16,14 @@ public class User {
 
     public User() {}
 
+    public User(String pseudo, String name, String lastName, String email, String password) {
+        this.pseudo = pseudo;
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
+
     @PrePersist
     public void prePersist() {
         if (this.role == null) this.role = UserRole.ROLE_USER;
