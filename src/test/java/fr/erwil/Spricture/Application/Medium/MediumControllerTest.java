@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 public class MediumControllerTest {
 
     @MockBean
@@ -34,7 +34,6 @@ public class MediumControllerTest {
     private static GetMediumDto dtoWithId(UUID uuid) {
         return Mockito.argThat(dto -> dto.getId().equals(uuid));
     }
-
 
 
     @Test
