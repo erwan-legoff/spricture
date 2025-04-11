@@ -5,10 +5,16 @@ import fr.erwil.Spricture.Application.User.User;
 
 public class CreateUserAdapter {
 
-    public static User getUser(CreateUserRequestDto dto, String encryptedPassword){
-        User user = new User(dto.pseudo(), dto.name(), dto.lastName(), dto.email(), encryptedPassword);
-        user.setRole(dto.role());
-        return user;
+    public static User getUser(CreateUserRequestDto dto, String encryptedPassword) {
+        return User.builder()
+                .pseudo(dto.getPseudo())
+                .name(dto.getName())
+                .lastName(dto.getLastName())
+                .email(dto.getEmail())
+                .password(encryptedPassword)
+                .role(dto.getRole())
+                .build();
     }
+
 
 }
