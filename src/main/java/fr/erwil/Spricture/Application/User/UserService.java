@@ -20,7 +20,7 @@ public class UserService implements IUserService {
     @Override
     public CreateUserResponseDto create(CreateUserRequestDto user) {
         try {
-            User userToCreate = CreateUserAdapter.getUser(user,passwordEncoder.encode(user.rawPassword()));
+            User userToCreate = CreateUserAdapter.getUser(user,passwordEncoder.encode(user.getRawPassword()));
             userRepository.save(userToCreate);
         } catch (Exception e) {
             throw new RuntimeException("Error while creating user", e);
