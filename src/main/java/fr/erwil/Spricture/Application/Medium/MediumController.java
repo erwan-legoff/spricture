@@ -11,6 +11,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
@@ -31,9 +32,15 @@ public class MediumController {
         this.mediumService=mediumService;
     }
 
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping("/hello")
     public @ResponseBody String greeting() {
         return "Hello World!";
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping("/hello-admin")
+    public @ResponseBody String greetingAdmin() {
+        return "Hello Admin World!";
     }
 
     @PostMapping("/medium")

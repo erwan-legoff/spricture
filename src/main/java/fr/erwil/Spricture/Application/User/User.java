@@ -18,7 +18,7 @@ public class User {
 
     @PrePersist
     public void prePersist() {
-        if (this.role == null) this.role = UserRole.USER;
+        if (this.role == null) this.role = UserRole.ROLE_USER;
     }
 
     @Id

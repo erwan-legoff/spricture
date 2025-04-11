@@ -2,7 +2,8 @@ package fr.erwil.Spricture.Configuration.Security;
 
 import fr.erwil.Spricture.Application.User.IUserRepository;
 import fr.erwil.Spricture.Application.User.User;
-import fr.erwil.Spricture.Application.User.UserRole;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,8 @@ import java.util.Set;
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
 
+
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailServiceImpl.class);
     private final IUserRepository userRepository;
 
     public UserDetailServiceImpl(IUserRepository userRepository) {

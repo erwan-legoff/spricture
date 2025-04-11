@@ -7,8 +7,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
 @Component
 public class DataSeedRunner implements CommandLineRunner {
 
@@ -36,7 +34,7 @@ public class DataSeedRunner implements CommandLineRunner {
         admin.setLastName("Test");
         admin.setEmail("admin@company.com");
         admin.setPassword(passwordEncoder.encode("1234"));
-        admin.setRole(UserRole.ADMIN);
+        admin.setRole(UserRole.ROLE_ADMIN);
 
         User user = new User();
         user.setPseudo("johnDoe");
@@ -44,7 +42,7 @@ public class DataSeedRunner implements CommandLineRunner {
         user.setLastName("Doe");
         user.setEmail("john@domain.com");
         user.setPassword(passwordEncoder.encode("password")); // à encoder
-        user.setRole(UserRole.USER);
+        user.setRole(UserRole.ROLE_USER);
 
         userRepository.save(admin);
         userRepository.save(user);
