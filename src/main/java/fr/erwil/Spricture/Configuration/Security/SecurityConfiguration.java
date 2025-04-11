@@ -23,12 +23,11 @@ import org.springframework.stereotype.Component;
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfiguration {
-    private UserDetailsService userDetailsService;
+
     private final JwtAuthenticationEndpoint authenticationEndpoint;
     private final JwtAuthenticationFilter authenticationFilter;
 
-    public SecurityConfiguration(UserDetailsService userDetailsService, JwtAuthenticationEndpoint authenticationEndpoint, JwtAuthenticationFilter authenticationFilter) {
-        this.userDetailsService = userDetailsService;
+    public SecurityConfiguration(JwtAuthenticationEndpoint authenticationEndpoint, JwtAuthenticationFilter authenticationFilter) {
         this.authenticationEndpoint = authenticationEndpoint;
         this.authenticationFilter = authenticationFilter;
     }

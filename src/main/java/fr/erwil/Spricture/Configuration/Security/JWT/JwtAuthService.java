@@ -12,9 +12,14 @@ import org.springframework.stereotype.Service;
 public class JwtAuthService implements IAuthService {
 
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    private IJwtTokenProvider jwtProvider;
+    private final IJwtTokenProvider jwtProvider;
+
+    public JwtAuthService(AuthenticationManager authenticationManager, IJwtTokenProvider jwtProvider) {
+        this.authenticationManager = authenticationManager;
+        this.jwtProvider = jwtProvider;
+    }
 
     public String login(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(

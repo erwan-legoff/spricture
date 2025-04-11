@@ -4,6 +4,7 @@ import fr.erwil.Spricture.Application.User.IUserRepository;
 import fr.erwil.Spricture.Application.User.User;
 import fr.erwil.Spricture.Application.User.UserRole;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -12,19 +13,17 @@ import java.util.Arrays;
 public class DataSeedRunner implements CommandLineRunner {
 
     private final IUserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public DataSeedRunner(IUserRepository userRepository) {
+    public DataSeedRunner(IUserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void run(String... args) throws Exception {
 
-        /*
-        if(!Arrays.asList(args).contains("seed")){
-            System.out.println("No 'seed' argument. Skipping seeding...");
-            return;
-        }*/
+        userRepository.deleteAll();
 
         if(userRepository.count() > 0){
             System.out.println("Users already exist. Skipping seeding.");
@@ -36,7 +35,7 @@ public class DataSeedRunner implements CommandLineRunner {
         admin.setName("Admin");
         admin.setLastName("Test");
         admin.setEmail("admin@company.com");
-        admin.setPassword("secret123"); // à encoder
+        admin.setPassword(passwordEncoder.encode("1234"));
         admin.setRole(UserRole.ADMIN);
 
         User user = new User();
@@ -44,7 +43,7 @@ public class DataSeedRunner implements CommandLineRunner {
         user.setName("John");
         user.setLastName("Doe");
         user.setEmail("john@domain.com");
-        user.setPassword("password"); // à encoder
+        user.setPassword(passwordEncoder.encode("password")); // à encoder
         user.setRole(UserRole.USER);
 
         userRepository.save(admin);
