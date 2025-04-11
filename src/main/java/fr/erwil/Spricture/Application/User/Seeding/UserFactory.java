@@ -20,41 +20,38 @@ public class UserFactory implements IUserFactory {
 
     @Override
     public User getAdminUser() {
-        return new User(
-                "UserAdmin",
-                "Administrator",
-                "LastName",
-                "admin@company.com",
-                passwordEncoder.encode("admin"),
-                UserRole.ROLE_ADMIN
-        );
+        return User.builder()
+                .pseudo("UserAdmin")
+                .name("Administrator")
+                .lastName("LastName")
+                .email("admin@company.com")
+                .password(passwordEncoder.encode("admin"))
+                .role(UserRole.ROLE_ADMIN)
+                .build();
     }
-
-
 
     @Override
     public User getUserUser() {
-        return new User(
-                "User",
-                "User",
-                "LastName",
-                "user@company.com",
-                passwordEncoder.encode("user"),
-                UserRole.ROLE_USER
-        );
+        return User.builder()
+                .pseudo("User")
+                .name("User")
+                .lastName("LastName")
+                .email("user@company.com")
+                .password(passwordEncoder.encode("user"))
+                .role(UserRole.ROLE_USER)
+                .build();
     }
 
     @Override
     public User getRandomUser() {
         String uuid = UUID.randomUUID().toString().substring(0, 8);
-        return new User(
-                "user_" + uuid,
-                "Random",
-                "User",
-                "random_" + uuid + "@example.com",
-                passwordEncoder.encode("default"),
-                UserRole.ROLE_USER
-        );
+        return User.builder()
+                .pseudo("user_" + uuid)
+                .name("Random")
+                .lastName("User")
+                .email("random_" + uuid + "@example.com")
+                .password(passwordEncoder.encode("default"))
+                .build();
     }
 
     @Override

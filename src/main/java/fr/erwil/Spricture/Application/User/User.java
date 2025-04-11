@@ -2,6 +2,7 @@ package fr.erwil.Spricture.Application.User;
 
 import fr.erwil.Spricture.Application.Medium.Medium;
 import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -11,25 +12,20 @@ import java.util.List;
 
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
+@ToString(exclude = {"password", "media"})
+@Getter
+@Setter
 @Entity
+@NoArgsConstructor
 public class User {
 
-    public User() {}
-
-    public User(String pseudo, String name, String lastName, String email, String password) {
+    @Builder
+    public User(String pseudo, String name, String lastName, String email, String password, UserRole role) {
         this.pseudo = pseudo;
         this.name = name;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-    }
-
-    public User(String pseudo, String name, String lastName, String password, String email, UserRole role) {
-        this.pseudo = pseudo;
-        this.name = name;
-        this.lastName = lastName;
-        this.password = password;
-        this.email = email;
         this.role = role;
     }
 
@@ -37,7 +33,7 @@ public class User {
     public void prePersist() {
         if (this.role == null) this.role = UserRole.ROLE_USER;
     }
-
+    @Getter
     @Id
     @GeneratedValue
     private Long id;
@@ -50,11 +46,15 @@ public class User {
     private  String lastName;
 
     @CreatedDate
+    @Setter(AccessLevel.NONE)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
+    @Setter(AccessLevel.NONE)
     private LocalDateTime modifiedAt;
 
+    @Getter
+    @Setter(AccessLevel.NONE)
     private LocalDateTime deletedAt;
 
     @Column(nullable = false)
@@ -70,71 +70,4 @@ public class User {
     private List<Medium> media;
 
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPseudo() {
-        return pseudo;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public UserRole getRole() {
-        return role;
-    }
-
-    public List<Medium> getMedia() {
-        return media;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setPseudo(String pseudo) {
-        this.pseudo = pseudo;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setModifiedAt(LocalDateTime modifiedAt) {
-        this.modifiedAt = modifiedAt;
-    }
-
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
-
-    public void setMedia(List<Medium> media) {
-        this.media = media;
-    }
 }
