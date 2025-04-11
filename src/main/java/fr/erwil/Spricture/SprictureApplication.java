@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +47,7 @@ public class SprictureApplication {
 	}
 
 	@Bean
+	@Profile("dev")
 	public CommandLineRunner applicationInitialization(IUuidFileStorage fileStorage){
 		return (args) -> {
 			fileStorage.deleteAll();
