@@ -1,4 +1,4 @@
-package fr.erwil.Spricture.Configuration.Data.Seeding;
+package fr.erwil.Spricture.Configuration.Seeding;
 
 import fr.erwil.Spricture.Application.User.IUserRepository;
 import fr.erwil.Spricture.Application.User.User;

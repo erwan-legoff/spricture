@@ -1,11 +1,11 @@
-package fr.erwil.Spricture.Application.Medium.Dtos;
+package fr.erwil.Spricture.Application.Medium.Dtos.Request;
 
 import java.util.UUID;
 
-public class SoftDeleteMediumDto {
+public class GetMediumDto {
     private final UUID id;
 
-    public SoftDeleteMediumDto(UUID id) {
+    public GetMediumDto(UUID id) {
         this.id = id;
     }
 

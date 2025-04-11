@@ -1,6 +1,6 @@
 package fr.erwil.Spricture.Application.Medium;
 
-import fr.erwil.Spricture.Application.Medium.Dtos.GetMediumDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Request.GetMediumDto;
 import fr.erwil.Spricture.Exceptions.Medium.MediumNotFoundException;
 import fr.erwil.Spricture.Tools.FileStorage.UuidFileStorageSimple;
 import org.junit.jupiter.api.Test;
@@ -9,14 +9,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;

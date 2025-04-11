@@ -1,6 +1,11 @@
 package fr.erwil.Spricture.Application.Medium;
 
-import fr.erwil.Spricture.Application.Medium.Dtos.*;
+import fr.erwil.Spricture.Application.Medium.Dtos.Adapter.MediumMultipartFileAdapter;
+import fr.erwil.Spricture.Application.Medium.Dtos.Adapter.SoftDeleteMediumAdapter;
+import fr.erwil.Spricture.Application.Medium.Dtos.Request.FullDeleteMediumDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Request.GetMediumDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Request.SoftDeleteMediumDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Response.CreateManyResponseDto;
 import fr.erwil.Spricture.Exceptions.AlreadySoftDeletedException;
 import fr.erwil.Spricture.Exceptions.Medium.MediumNotFoundException;
 import fr.erwil.Spricture.Exceptions.Medium.MediumProcessingException;
@@ -37,7 +42,7 @@ public class MediumService implements  IMediumService {
     @Transactional
     @Override
     public Medium create(MultipartFile multipartFile) throws MediumProcessingException {
-        Medium mediumToCreate =  MediumMultipartFileAdaptor.getMedium(multipartFile);
+        Medium mediumToCreate =  MediumMultipartFileAdapter.getMedium(multipartFile);
 
         Medium mediumCreated = mediumRepository.save(mediumToCreate);
 
@@ -45,7 +50,7 @@ public class MediumService implements  IMediumService {
             fileStorage.save(multipartFile, mediumCreated.getId());
             return mediumCreated;
         } catch (IOException e) {
-            SoftDeleteMediumDto softDeleteDto = SoftDeleteMediumAdaptor.getSoftDeleteMediumDto(mediumCreated);
+            SoftDeleteMediumDto softDeleteDto = SoftDeleteMediumAdapter.getSoftDeleteMediumDto(mediumCreated);
 
             this.softDelete(softDeleteDto);
             throw new MediumProcessingException("Error while creating the file : " + multipartFile.getOriginalFilename(), e);

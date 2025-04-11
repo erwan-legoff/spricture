@@ -1,7 +1,7 @@
 package fr.erwil.Spricture.Application.Medium;
 
-import fr.erwil.Spricture.Application.Medium.Dtos.CreateManyResponseDto;
-import fr.erwil.Spricture.Application.Medium.Dtos.GetMediumDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Response.CreateManyResponseDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Request.GetMediumDto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -37,6 +37,7 @@ public class MediumController {
     public @ResponseBody String greeting() {
         return "Hello World!";
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping("/hello-admin")
     public @ResponseBody String greetingAdmin() {

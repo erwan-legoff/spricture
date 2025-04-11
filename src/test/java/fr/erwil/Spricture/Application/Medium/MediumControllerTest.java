@@ -1,12 +1,10 @@
 package fr.erwil.Spricture.Application.Medium;
 
-import fr.erwil.Spricture.Application.Medium.Dtos.GetMediumDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Request.GetMediumDto;
 import fr.erwil.Spricture.Exceptions.Medium.MediumNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.internal.matchers.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
