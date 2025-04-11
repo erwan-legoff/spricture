@@ -1,4 +1,5 @@
 # Application configuration example
+spring.profiles.active=dev
 spring.application.name=Spricture
 spring.jpa.hibernate.ddl-auto=create
 spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect

@@ -1,41 +1,31 @@
 package fr.erwil.Spricture.Application.User.Seeding;
 
 import fr.erwil.Spricture.Application.User.Dtos.Requests.CreateUserRequestDto;
+import fr.erwil.Spricture.Application.User.IUserRepository;
 import fr.erwil.Spricture.Application.User.UserRole;
 import fr.erwil.Spricture.Application.User.UserService;
 import fr.erwil.Spricture.Configuration.Seeding.ISeeder;
+import fr.erwil.Spricture.Tools.FileStorage.IUuidFileStorage;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserSeeder implements ISeeder {
 
-    private final UserService userService;
+    private final IUserRepository userRepository;
+    private final UserFactory userFactory;
 
-    public UserSeeder(UserService userService) {
-        this.userService = userService;
+    public UserSeeder(IUserRepository userRepository, UserFactory userFactory) {
+        this.userRepository = userRepository;
+        this.userFactory = userFactory;
     }
 
     @Override
     public void seed() {
-        CreateUserRequestDto userAdmin =
-                new CreateUserRequestDto(
-                                "UserAdmin",
-                                "admin@company.com",
-                                "admin",
-                                "Administrator",
-                                "LastName",
-                                UserRole.ROLE_ADMIN);
+        userRepository.deleteAll();
 
-
-        userService.create(userAdmin);
-
-        CreateUserRequestDto user =
-                new CreateUserRequestDto(
-                        "User",
-                        "user@company.com",
-                        "user",
-                        "User",
-                        "LastName",
-                        UserRole.ROLE_USER);
-
-        userService.create(user);
+        userRepository.save(userFactory.getAdminUser());
+        userRepository.save(userFactory.getUserUser());
     }
 }
+

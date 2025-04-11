@@ -6,8 +6,8 @@ import fr.erwil.Spricture.Application.User.User;
 public class CreateUserAdapter {
 
     public static User getUser(CreateUserRequestDto dto, String encryptedPassword){
-        User user = new User(dto.getPseudo(), dto.getName(), dto.getLastName(), dto.getEmail(), encryptedPassword);
-        user.setRole(dto.getRole());
+        User user = new User(dto.pseudo(), dto.name(), dto.lastName(), dto.email(), encryptedPassword);
+        user.setRole(dto.role());
         return user;
     }
 
