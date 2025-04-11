@@ -10,12 +10,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-@ToString(exclude = {"password", "media"})
 @Getter
 @Setter
-@Entity
+@ToString(exclude = {"password", "media"})
 @NoArgsConstructor
 public class User {
 
@@ -31,11 +31,13 @@ public class User {
 
     @PrePersist
     public void prePersist() {
-        if (this.role == null) this.role = UserRole.ROLE_USER;
+        if (this.role == null) {
+            this.role = UserRole.ROLE_USER;
+        }
     }
-    @Getter
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -43,8 +45,18 @@ public class User {
 
     private String name;
 
-    private  String lastName;
+    private String lastName;
 
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
+    @Column(updatable = false)
     @CreatedDate
     @Setter(AccessLevel.NONE)
     private LocalDateTime createdAt;
@@ -53,21 +65,10 @@ public class User {
     @Setter(AccessLevel.NONE)
     private LocalDateTime modifiedAt;
 
-    @Getter
     @Setter(AccessLevel.NONE)
     private LocalDateTime deletedAt;
 
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
 
     @OneToMany(mappedBy = "ownerId")
     private List<Medium> media;
-
-
 }
