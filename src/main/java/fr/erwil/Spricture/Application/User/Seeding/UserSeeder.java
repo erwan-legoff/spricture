@@ -26,6 +26,7 @@ public class UserSeeder implements ISeeder {
 
         userRepository.save(userFactory.getAdminUser());
         userRepository.save(userFactory.getUserUser());
+        userRepository.saveAll(userFactory.getManyRandomUsers(10));
     }
 }
 

@@ -5,7 +5,9 @@ import fr.erwil.Spricture.Application.User.UserRole;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 @Component
 public class UserFactory implements IUserFactory {
@@ -28,6 +30,8 @@ public class UserFactory implements IUserFactory {
         );
     }
 
+
+
     @Override
     public User getUserUser() {
         return new User(
@@ -42,13 +46,21 @@ public class UserFactory implements IUserFactory {
 
     @Override
     public User getRandomUser() {
+        String uuid = UUID.randomUUID().toString().substring(0, 8);
         return new User(
-                "user" + UUID.randomUUID(),
+                "user_" + uuid,
                 "Random",
                 "User",
-                "random" + UUID.randomUUID() + "@dev.local",
+                "random_" + uuid + "@example.com",
                 passwordEncoder.encode("default"),
                 UserRole.ROLE_USER
         );
+    }
+
+    @Override
+    public List<User> getManyRandomUsers(int number) {
+        return IntStream.range(0, number)
+                .mapToObj(i->getRandomUser())
+                .toList();
     }
 }
