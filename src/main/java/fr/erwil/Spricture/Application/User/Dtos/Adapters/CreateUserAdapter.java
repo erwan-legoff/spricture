@@ -12,7 +12,6 @@ public class CreateUserAdapter {
                 .lastName(dto.getLastName())
                 .email(dto.getEmail())
                 .password(encryptedPassword)
-                .role(dto.getRole())
                 .build();
     }
 

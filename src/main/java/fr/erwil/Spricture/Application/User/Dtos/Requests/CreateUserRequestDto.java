@@ -33,5 +33,4 @@ public class CreateUserRequestDto {
     @NotBlank
     private String lastName;
 
-    private UserRole role;
 }
