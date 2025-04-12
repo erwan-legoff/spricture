@@ -1,0 +1,21 @@
+meta {
+  name: createUser
+  type: http
+  seq: 3
+}
+
+post {
+  url: http:localhost:8080/user
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "pseudo": "neo_spricture",
+    "email": "neo.smith@example.com",
+    "rawPassword": "Matrix#2025",
+    "name": "Thomas",
+    "lastName": "Anderson"
+  }
+}
