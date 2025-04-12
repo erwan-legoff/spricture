@@ -1,13 +1,11 @@
 package fr.erwil.Spricture.Application.User.Dtos.Responses;
 
+import lombok.Builder;
+import lombok.Value;
+
+@Value
+@Builder
 public class CreateUserResponseDto {
-    private final boolean isUserCreated;
-
-    public CreateUserResponseDto(boolean isUserCreated) {
-        this.isUserCreated = isUserCreated;
-    }
-
-    public boolean isUserCreated() {
-        return isUserCreated;
-    }
+    boolean userCreated;
 }
+

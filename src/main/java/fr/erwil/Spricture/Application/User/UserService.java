@@ -22,9 +22,10 @@ public class UserService implements IUserService {
         try {
             User userToCreate = CreateUserAdapter.getUser(user,passwordEncoder.encode(user.getRawPassword()));
             userRepository.save(userToCreate);
+            return CreateUserResponseDto.builder().userCreated(true).build();
         } catch (Exception e) {
             throw new RuntimeException("Error while creating user", e);
         }
-        return new CreateUserResponseDto(true);
+
     }
 }
