@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Component
 @Configuration
@@ -38,13 +39,18 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorize)->{
-                    authorize.requestMatchers("/api/auth/**").permitAll();
-                    authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
-                    authorize.anyRequest().authenticated();
-                }).httpBasic(Customizer.withDefaults());
+    SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                            CorsConfigurationSource corsConfigurationSource) throws Exception {
+
+        http
+            .cors(cors -> cors.configurationSource(corsConfigurationSource))
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests((authorize)->{
+                authorize.requestMatchers("/api/auth/**").permitAll();
+                authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
+                authorize.requestMatchers(HttpMethod.POST, "/user").permitAll();
+                authorize.anyRequest().authenticated();
+            }).httpBasic(Customizer.withDefaults());
 
         http.exceptionHandling(exception ->exception.authenticationEntryPoint(authenticationEndpoint));
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);

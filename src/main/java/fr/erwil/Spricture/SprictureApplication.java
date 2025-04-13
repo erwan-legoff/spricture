@@ -20,8 +20,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableJpaAuditing
 @SpringBootApplication()
 public class SprictureApplication {
-	@Value("${cors.allowed.origins}")
-	private String allowedOrigins;
 
 	@RequestMapping("/")
 	String home(){
@@ -32,19 +30,6 @@ public class SprictureApplication {
 		SpringApplication.run(SprictureApplication.class, args);
 	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(@NonNull CorsRegistry registry) {
-				registry.addMapping("/**")
-						.allowedOrigins(allowedOrigins)
-						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-						.allowedHeaders("Authorization", "Content-Type")
-						.allowCredentials(true);
-			}
-		};
-	}
 
 	@Bean
 	@Profile("dev")
