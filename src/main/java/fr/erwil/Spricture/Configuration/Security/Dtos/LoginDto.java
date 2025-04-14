@@ -1,5 +1,10 @@
 package fr.erwil.Spricture.Configuration.Security.Dtos;
 
+import lombok.Data;
+import lombok.Getter;
+
+@Getter
+@Data
 public class LoginDto {
 
     private final String username;
@@ -10,11 +15,4 @@ public class LoginDto {
         this.password = password;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 }

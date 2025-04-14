@@ -1,5 +1,8 @@
 package fr.erwil.Spricture.Configuration.Security.Dtos;
 
+import lombok.Getter;
+
+@Getter
 public class JwtLoginResponseDto {
     private final String accessToken;
 
@@ -7,7 +10,4 @@ public class JwtLoginResponseDto {
         this.accessToken = accessToken;
     }
 
-    public String getAccessToken() {
-        return accessToken;
-    }
 }

@@ -3,6 +3,7 @@ package fr.erwil.Spricture.Configuration.Security.JWT;
 import fr.erwil.Spricture.Configuration.Security.UserDetailServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -18,6 +19,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * OncePerRequestFilter means that the filter won't be used for other dispatches like async or error.
  */
@@ -90,17 +94,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     /**
-     * Will try to extract the Token from the token
-     * @param request the request to extract the token from
-     * @return the token if ok or null
+     * Extracts the JWT token from the Authorization header or the jwt cookie.
+     * @param request the HTTP request to extract the token from
+     * @return the token if found and valid, or null
      */
     private String extractToken(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
-        if (!StringUtils.hasText(header) || !header.startsWith("Bearer ")) {
-            logger.info("Token is empty in header.");
+        if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
+            return header.substring(7);
+        }
+        if (request.getCookies() == null){
             return null;
         }
-        return header.substring(7);
+        List<Cookie> cookies = new ArrayList<>(List.of(request.getCookies()));
+        return cookies.stream()
+                .filter(cookie -> "jwt".equals(cookie.getName()))
+                .map(Cookie::getValue)
+                .filter(StringUtils::hasText)
+                .findFirst()
+                .orElse(null);
+
     }
 
 }
