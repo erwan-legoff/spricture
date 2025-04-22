@@ -1,6 +1,5 @@
 package fr.erwil.Spricture.Configuration.Security.JWT;
 
-import fr.erwil.Spricture.Configuration.Security.Dtos.JwtLoginResponseDto;
 import fr.erwil.Spricture.Configuration.Security.Dtos.LoginDto;
 import fr.erwil.Spricture.Configuration.Security.IAuthService;
 import org.springframework.core.env.Environment;
@@ -29,17 +28,32 @@ public class JwtLoginController {
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody LoginDto loginDto) {
         String token = authService.login(loginDto);
-        ResponseCookie cookie = ResponseCookie.from("jwt", token)
-                .httpOnly(true)
-                .secure(isProd)
-                .sameSite(this.sameSite)
-                .path("/")
-                .maxAge(60 * 60 * 24)
-                .build();
+        ResponseCookie cookie = buildJwtCookie(token, 60 * 60 * 24);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("Set-Cookie", cookie.toString())
+                .build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        String deletedToken = "";
+        ResponseCookie cookie = buildJwtCookie(deletedToken, 0);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("Set-Cookie", cookie.toString())
+                .build();
+    }
+
+    private ResponseCookie buildJwtCookie(String token, int maxAge) {
+        return ResponseCookie.from("jwt", token)
+                .httpOnly(true)
+                .secure(isProd)
+                .sameSite(this.sameSite)
+                .path("/")
+                .maxAge(maxAge)
                 .build();
     }
 
