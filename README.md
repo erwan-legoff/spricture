@@ -37,7 +37,9 @@ This changelog tracks the main milestones and version evolution of the **Sprictu
 - [x] Handle multiple photos upload and retrieval
 - [x] Add JWT-based authentication
 - [ ] Add a basic permission system (roles only)
-- [ ] Add user registration
+- [X] Add user registration
+- [ ] User registration by mail validation
+- [ ] User registration by admin validation
 - [ ] Implement photo encryption before storage
 
 ---
