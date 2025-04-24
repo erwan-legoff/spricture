@@ -1,5 +1,7 @@
 package fr.erwil.Spricture.Configuration.Security.JWT;
 
+import fr.erwil.Spricture.Application.User.IUserRepository;
+import fr.erwil.Spricture.Application.User.User;
 import fr.erwil.Spricture.Configuration.Security.UserDetailServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,6 +23,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * OncePerRequestFilter means that the filter won't be used for other dispatches like async or error.
@@ -33,9 +36,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
 
-    public JwtAuthenticationFilter(UserDetailsService userDetailsService, IJwtTokenProvider jwtTokenProvider) {
+    private final IUserRepository userRepository;
+
+    public JwtAuthenticationFilter(UserDetailsService userDetailsService, IJwtTokenProvider jwtTokenProvider, IUserRepository userRepository) {
         this.userDetailsService = userDetailsService;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -55,7 +61,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         UserDetails userDetails = extractUserDetails(token);
-        logger.info("Authorities: {}",userDetails.getAuthorities().toString());
+        Optional<User> user = userRepository.findByPseudoAndIsValidatedTrue(userDetails.getUsername());
+        if(user.isEmpty()) {
+            logger.info("Account not validated.");
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         UsernamePasswordAuthenticationToken authentication = getAuthentication(request, userDetails);
 

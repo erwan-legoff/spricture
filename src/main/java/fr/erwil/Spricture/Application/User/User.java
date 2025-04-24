@@ -53,6 +53,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private boolean isValidated;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
