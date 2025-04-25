@@ -36,12 +36,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
 
-    private final IUserRepository userRepository;
-
-    public JwtAuthenticationFilter(UserDetailsService userDetailsService, IJwtTokenProvider jwtTokenProvider, IUserRepository userRepository) {
+    public JwtAuthenticationFilter(UserDetailsService userDetailsService, IJwtTokenProvider jwtTokenProvider) {
         this.userDetailsService = userDetailsService;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -61,12 +58,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         UserDetails userDetails = extractUserDetails(token);
-        Optional<User> user = userRepository.findByPseudoAndIsValidatedTrue(userDetails.getUsername());
-        if(user.isEmpty()) {
-            logger.info("Account not validated.");
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         UsernamePasswordAuthenticationToken authentication = getAuthentication(request, userDetails);
 
