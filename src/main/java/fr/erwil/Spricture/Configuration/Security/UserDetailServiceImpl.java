@@ -31,10 +31,12 @@ public class UserDetailServiceImpl implements UserDetailsService {
         Set<GrantedAuthority> authorities = new HashSet<>();
 
         authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
-        return new org.springframework.security.core.userdetails.User(
-                username,
-                user.getPassword(),
-                authorities
-        );
+
+        return  org.springframework.security.core.userdetails.User.withUsername(username)
+                .password(user.getPassword())
+                .authorities(authorities)
+                .disabled(!user.isValidated())
+                .build();
+
     }
 }
