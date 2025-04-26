@@ -8,7 +8,6 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -17,27 +16,38 @@ import java.util.Date;
 @Component
 public class JwtTokenProviderImpl implements IJwtTokenProvider {
 
-    private final long jwtExpirationMilliseconds;
+    private final long loginExpirationMilliseconds;
+    private final long verifyExpirationMilliseconds;
     private final SecretKey secretKey;
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProviderImpl.class);
 
     public JwtTokenProviderImpl(SecurityJwtProperties properties) {
         this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(properties.getSecretKey()));
-        this.jwtExpirationMilliseconds = properties.getExpirationMilliseconds();
+        this.loginExpirationMilliseconds = properties.getLoginExpirationMilliseconds();
+        this.verifyExpirationMilliseconds = properties.getLoginExpirationMilliseconds();
+
     }
 
     /**
      * Will generate token based on a username and the current date.
-     * @param authentication auth infos
+     * @param username the users name
      * @return the token
      */
     @Override
-    public String generateToken(Authentication authentication) {
-        String username = authentication.getName();
-        Date currentDate = new Date();
+    public String generateLoginToken(String username) {
+        return generateToken(username,this.loginExpirationMilliseconds);
+    }
 
-        Date expireDate = new Date(currentDate.getTime() + this.jwtExpirationMilliseconds);
+    @Override
+    public String generateVerifyToken(String username) {
+        return generateToken(username,this.verifyExpirationMilliseconds);
+    }
+
+
+    public String generateToken(String username, long expirationMilliseconds) {
+        Date currentDate = new Date();
+        Date expireDate = new Date(currentDate.getTime() + expirationMilliseconds);
 
         return Jwts.builder()
                 .subject(username)
@@ -46,6 +56,7 @@ public class JwtTokenProviderImpl implements IJwtTokenProvider {
                 .signWith(this.secretKey, Jwts.SIG.HS256)
                 .compact();
     }
+
 
     /**
      * Extract the username from the token
