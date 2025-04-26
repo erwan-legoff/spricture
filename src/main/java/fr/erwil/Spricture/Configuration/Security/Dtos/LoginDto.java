@@ -7,11 +7,11 @@ import lombok.Getter;
 @Data
 public class LoginDto {
 
-    private final String username;
+    private final String email;
     private final String password;
 
-    public LoginDto(String username, String password) {
-        this.username = username;
+    public LoginDto(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 
