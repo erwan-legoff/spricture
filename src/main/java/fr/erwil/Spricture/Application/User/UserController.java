@@ -27,11 +27,4 @@ public class UserController {
 
     }
 
-    @PostMapping("/user/validate")
-    ResponseEntity<CreateUserResponseDto> validateUser(@RequestBody @Valid CreateUserRequestDto requestDto){
-        CreateUserResponseDto responseDto = userService.create(requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(responseDto);
-
-    }
 }

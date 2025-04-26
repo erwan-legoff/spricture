@@ -6,10 +6,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Arrays;
 
 @RestController
@@ -25,6 +23,8 @@ public class JwtLoginController {
         this.sameSite = this.isProd ? "Strict" : "Lax";
     }
 
+
+
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody LoginDto loginDto) {
         String token = authService.login(loginDto);
@@ -33,6 +33,24 @@ public class JwtLoginController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .header("Set-Cookie", cookie.toString())
+                .build();
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<Void> verify(@RequestParam String token) {
+        boolean isValidated = authService.verify(token);
+
+
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @GetMapping("/send-verification-email")
+    public ResponseEntity<Void> verificationEmail(@RequestParam String email) {
+        authService.sendVerificationEmail(email);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
                 .build();
     }
 
@@ -56,6 +74,8 @@ public class JwtLoginController {
                 .maxAge(maxAge)
                 .build();
     }
+
+
 
 
 }

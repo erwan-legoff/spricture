@@ -4,4 +4,8 @@ import fr.erwil.Spricture.Configuration.Security.Dtos.LoginDto;
 
 public interface IAuthService {
     public String login(LoginDto loginDto);
+
+    boolean verify(String token);
+
+    void sendVerificationEmail(String email);
 }
