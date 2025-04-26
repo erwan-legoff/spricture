@@ -33,7 +33,7 @@ public class JwtAuthenticationEndpoint implements AuthenticationEntryPoint {
 
         switch (exception) {
             case DisabledException _ -> {
-                status      = HttpStatus.FORBIDDEN;   // 403
+                status      = HttpStatus.FORBIDDEN;
                 bearerError = "account_disabled";
                 errorCode   = "ACCOUNT_DISABLED";
             }
