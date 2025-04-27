@@ -19,7 +19,7 @@ import java.time.OffsetDateTime;
 @Component
 public class JwtAuthenticationEndpoint implements AuthenticationEntryPoint {
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private  final ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void commence(HttpServletRequest request,
