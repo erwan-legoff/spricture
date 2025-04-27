@@ -2,6 +2,7 @@ package fr.erwil.Spricture.Configuration.Security.JWT;
 
 import fr.erwil.Spricture.Application.User.IUserRepository;
 import fr.erwil.Spricture.Application.User.User;
+import fr.erwil.Spricture.Configuration.FrontendProperties;
 import fr.erwil.Spricture.Configuration.Security.Dtos.LoginDto;
 import fr.erwil.Spricture.Configuration.Security.IAuthService;
 import fr.erwil.Spricture.Exceptions.BaseException;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -34,12 +37,14 @@ public class JwtAuthService implements IAuthService {
     private final IJwtTokenProvider jwtProvider;
 
     private final MailService mailService;
+    private final FrontendProperties frontendProperties;
 
-    public JwtAuthService(AuthenticationManager authenticationManager, IUserRepository userRepository, IJwtTokenProvider jwtProvider, MailService mailService) {
+    public JwtAuthService(AuthenticationManager authenticationManager, IUserRepository userRepository, IJwtTokenProvider jwtProvider, MailService mailService, FrontendProperties frontendProperties) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.jwtProvider = jwtProvider;
         this.mailService = mailService;
+        this.frontendProperties = frontendProperties;
     }
 
     public String login(LoginDto loginDto) {
@@ -95,14 +100,19 @@ public class JwtAuthService implements IAuthService {
     }
 
     /**
-     * This creates a URI to validate the given token
-     * @return
+     * Builds the public URL (front-end) that the user will click to validate the token.
      */
     private Function<String, URI> getTokenToUriFunction() {
-        return token -> MvcUriComponentsBuilder.fromMethodName(
-                JwtLoginController.class,
-                "verify",
-                token
-        ).build().toUri();
+        return token -> {
+            String base = frontendProperties.getHost();
+            if (!base.endsWith("/")) base += "/"; //clean up the host
+
+            String path = frontendProperties.getVerifyAccount();
+            if (path.startsWith("/")) path = path.substring(1); //cleanup the path
+
+            String encoded = URLEncoder.encode(token, StandardCharsets.UTF_8);
+            return URI.create(base + path + "?token=" + encoded);
+        };
     }
+
 }

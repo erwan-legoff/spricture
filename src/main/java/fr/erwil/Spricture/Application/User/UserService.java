@@ -25,10 +25,7 @@ public class UserService implements IUserService {
     public CreateUserResponseDto create(CreateUserRequestDto user) {
         try {
             User userToCreate = CreateUserAdapter.getUser(user,passwordEncoder.encode(user.getRawPassword()));
-            // TODO : Create a email validation process
-            mailService.sendSimpleMessage(userToCreate.getEmail(),"Validate your email address.", "Please click on this link to validate your email address.");
             userRepository.save(userToCreate);
-            mailService.sendSimpleMessage(userToCreate.getEmail(),"Account Creation Success !", "Your account has been successfully created !");
             return CreateUserResponseDto.builder().userCreated(true).build();
         } catch (Exception e) {
             throw new UserCreationException("Error while creating user", e);
