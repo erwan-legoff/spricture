@@ -32,7 +32,7 @@ public class MediumControllerTest {
     private MockMvc mockMvc;
 
     private static GetMediumDto dtoWithId(UUID uuid) {
-        return Mockito.argThat(dto -> dto.getId().equals(uuid));
+        return Mockito.argThat(dto -> dto.id().equals(uuid));
     }
 
 
