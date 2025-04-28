@@ -1,11 +1,13 @@
-package fr.erwil.Spricture.Configuration.Security;
+package fr.erwil.Spricture.Configuration.Security.UserDetails;
 
 import fr.erwil.Spricture.Application.User.IUserRepository;
 import fr.erwil.Spricture.Application.User.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,11 +34,13 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
         authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
 
-        return  org.springframework.security.core.userdetails.User.withUsername(username)
-                .password(user.getPassword())
-                .authorities(authorities)
-                .disabled(!user.isValidated())
-                .build();
+        return new CustomUserDetails(
+                user.getId(),
+                user.getEmail(),
+                user.getPassword(),
+                authorities,
+                user.isValidated()
+        );
 
     }
 }
