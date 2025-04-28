@@ -20,7 +20,7 @@ public class UserFactory implements IUserFactory {
 
     @Override
     public User getAdminUser() {
-        return User.builder()
+        User admin = User.builder()
                 .pseudo("UserAdmin")
                 .name("Administrator")
                 .lastName("LastName")
@@ -28,11 +28,13 @@ public class UserFactory implements IUserFactory {
                 .password(passwordEncoder.encode("admin"))
                 .role(UserRole.ROLE_ADMIN)
                 .build();
+        admin.setValidated(true);
+        return admin;
     }
 
     @Override
     public User getUserUser() {
-        return User.builder()
+        User user = User.builder()
                 .pseudo("User")
                 .name("User")
                 .lastName("LastName")
@@ -40,18 +42,22 @@ public class UserFactory implements IUserFactory {
                 .password(passwordEncoder.encode("user"))
                 .role(UserRole.ROLE_USER)
                 .build();
+        user.setValidated(true);
+        return user;
     }
 
     @Override
     public User getRandomUser() {
         String uuid = UUID.randomUUID().toString().substring(0, 8);
-        return User.builder()
+        User randomUser = User.builder()
                 .pseudo("user_" + uuid)
                 .name("Random")
                 .lastName("User")
                 .email("random_" + uuid + "@example.com")
                 .password(passwordEncoder.encode("default"))
                 .build();
+        randomUser.setValidated(true);
+        return randomUser;
     }
 
     @Override
