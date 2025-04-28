@@ -1,8 +1,5 @@
 package fr.erwil.Spricture.Configuration.Security.JWT;
 
-import fr.erwil.Spricture.Application.User.IUserRepository;
-import fr.erwil.Spricture.Application.User.User;
-import fr.erwil.Spricture.Configuration.Security.UserDetailServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -23,7 +20,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * OncePerRequestFilter means that the filter won't be used for other dispatches like async or error.
