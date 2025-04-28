@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class MediumService implements  IMediumService {
+public class MediumService  {
 
     private static final Logger log = LogManager.getLogger(MediumService.class);
     private final IUuidFileStorage fileStorage;
@@ -40,9 +40,9 @@ public class MediumService implements  IMediumService {
     }
 
     @Transactional
-    @Override
-    public Medium create(MultipartFile multipartFile) throws MediumProcessingException {
+    public Medium create(MultipartFile multipartFile, Long ownerId) throws MediumProcessingException {
         Medium mediumToCreate =  MediumMultipartFileAdapter.getMedium(multipartFile);
+        mediumToCreate.setOwnerId(ownerId);
 
         Medium mediumCreated = mediumRepository.save(mediumToCreate);
 
@@ -58,13 +58,13 @@ public class MediumService implements  IMediumService {
     }
 
 
-    @Override
-    public CreateManyResponseDto createMany(List<MultipartFile> multipartFiles) throws MediumProcessingException {
+
+    public CreateManyResponseDto createMany(List<MultipartFile> multipartFiles, Long ownerId) throws MediumProcessingException {
         List<Medium> createdMedia = new ArrayList<>();
         List<String> notCreatedFileNames = new ArrayList<>();
         for(MultipartFile file : multipartFiles){
             try {
-                Medium medium = this.create(file);
+                Medium medium = this.create(file, ownerId);
                 createdMedia.add(medium);
             } catch (Exception e) {
                 log.warn("{} medium was not created because of this error: {}", file.getOriginalFilename(), e.getMessage(), e);
@@ -76,31 +76,31 @@ public class MediumService implements  IMediumService {
         return new CreateManyResponseDto(createdMedia, notCreatedFileNames);
     }
 
-    @Override
+
     public InputStreamResource getFile(GetMediumDto getMediumDto) throws MediumProcessingException {
         Path file = null;
         InputStreamResource resource = null;
         try {
-            file = fileStorage.read(getMediumDto.getId());
+            file = fileStorage.read(getMediumDto.id());
             resource = new InputStreamResource(Files.newInputStream(file));
         }
         catch (FileNotFoundException e){
-            throw new MediumNotFoundException("Medium "+ getMediumDto.getId() + " Not found",e);
+            throw new MediumNotFoundException("Medium "+ getMediumDto.id() + " Not found",e);
         }
         catch (IOException e) {
-            throw new MediumProcessingException("Error while getting medium"+ getMediumDto.getId(),e);
+            throw new MediumProcessingException("Error while getting medium"+ getMediumDto.id(),e);
         }
         return  resource;
 
 
     }
 
-    @Override
-    public List<Medium> getMedia() {
-        return mediumRepository.findAll();
+
+    public List<Medium> getMedia(Long ownerId) {
+        return mediumRepository.findByOwnerId(ownerId);
     }
 
-    @Override
+
     public void softDelete(SoftDeleteMediumDto softDeleteMediumDto) throws AlreadySoftDeletedException {
         Medium mediumToSoftDelete = mediumRepository.findById(softDeleteMediumDto.getId()).orElseThrow(
                 () -> new EntityNotFoundException("The medium " + softDeleteMediumDto.getId() + " was not found before soft delete")
@@ -114,7 +114,7 @@ public class MediumService implements  IMediumService {
 
     }
 
-    @Override
+
     public void fullDelete(FullDeleteMediumDto fullDeleteMediumDto) throws MediumProcessingException {
         try {
             UUID mediumId = fullDeleteMediumDto.getId();
