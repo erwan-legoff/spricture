@@ -1,6 +1,8 @@
 package fr.erwil.Spricture.Application.Medium;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,10 +14,12 @@ import java.util.UUID;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class Medium {
+    @Getter
     @GeneratedValue(strategy = GenerationType.UUID)
     @Id
     private UUID id;
 
+    @Setter
     private Long ownerId;
 
     private String name;
@@ -28,6 +32,8 @@ public class Medium {
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
 
+    @Getter
+    @Setter
     private LocalDateTime deletedAt;
 
     private LocalDateTime originallyCreatedAt;
@@ -48,15 +54,4 @@ public class Medium {
         this.name = name;
     }
 
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
-    }
 }
