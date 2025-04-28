@@ -43,4 +43,13 @@ public class UserDetailServiceImpl implements UserDetailsService {
         );
 
     }
+
+    public CustomUserDetails getCurrentUserDetails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new IllegalStateException("No authenticated user found");
+        }
+        return (CustomUserDetails) authentication.getPrincipal();
+    }
+
 }
