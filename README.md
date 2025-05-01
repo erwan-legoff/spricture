@@ -39,7 +39,7 @@ This changelog tracks the main milestones and version evolution of the **Sprictu
 - [X] Add user registration
 - [X] User registration by mail validation
 - [X] User can only see/update his own photos
-- [ ] User can delete photos
+- [X] User can delete photos
 - [ ] User registration by admin validation
 - [ ] Add a basic permission system (roles only)
 - [ ] Implement photo encryption before storage
