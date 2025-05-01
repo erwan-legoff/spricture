@@ -13,12 +13,10 @@ public class UserService implements IUserService {
 
     private final IUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final MailService mailService;
 
-    public UserService(IUserRepository userRepository, PasswordEncoder passwordEncoder, MailService mailService) {
+    public UserService(IUserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.mailService = mailService;
     }
 
     @Override
