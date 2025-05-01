@@ -100,17 +100,18 @@ public class MediumService  {
         return mediumRepository.findByOwnerIdAndDeletedAtIsNull(ownerId);
     }
 
-
+    @Transactional
     public void softDelete(SoftDeleteMediumDto softDeleteMediumDto) throws AlreadySoftDeletedException {
         Medium mediumToSoftDelete = mediumRepository.findById(softDeleteMediumDto.id()).orElseThrow(
                 () -> new EntityNotFoundException("The medium " + softDeleteMediumDto.id() + " was not found before soft delete")
         );
 
         if (mediumToSoftDelete.getDeletedAt() != null) {
-            throw new AlreadySoftDeletedException("the medium " + softDeleteMediumDto.getId() + " was already soft deleted");
+            throw new AlreadySoftDeletedException("the medium " + softDeleteMediumDto.id() + " was already soft deleted");
         }
 
         mediumToSoftDelete.setDeletedAt(LocalDateTime.now());
+        mediumRepository.save(mediumToSoftDelete);
 
     }
 

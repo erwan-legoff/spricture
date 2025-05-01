@@ -1,5 +1,6 @@
 package fr.erwil.Spricture.Application.Medium;
 
+import fr.erwil.Spricture.Application.Medium.Dtos.Requests.SoftDeleteMediumDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.Responses.CreateManyResponseDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.Requests.GetMediumDto;
 import jakarta.validation.constraints.NotEmpty;
@@ -105,7 +106,7 @@ public class MediumController {
     }
 
     /**
-     * This create an URI for each medium that points to the correct getMedium endpoint
+     * This creates a URI for each medium that points to the correct getMedium endpoint
      * @return
      */
     private static Function<Medium, URI> getMediumToUriFunction() {
@@ -115,5 +116,13 @@ public class MediumController {
                 medium.getId().toString()
         ).build().toUri();
     }
+
+    @DeleteMapping("/medium")
+    public ResponseEntity<Void> softDeleteMedium(@RequestBody @NotNull SoftDeleteMediumDto softDeleteMediumDto) {
+        logger.info("Soft deleting medium {}", softDeleteMediumDto.id());
+        mediumService.softDelete(softDeleteMediumDto);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }
