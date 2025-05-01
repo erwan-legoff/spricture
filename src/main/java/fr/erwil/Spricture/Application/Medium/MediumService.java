@@ -97,7 +97,7 @@ public class MediumService  {
 
 
     public List<Medium> getMedia(Long ownerId) {
-        return mediumRepository.findByOwnerId(ownerId);
+        return mediumRepository.findByOwnerIdAndDeletedAtIsNull(ownerId);
     }
 
 
