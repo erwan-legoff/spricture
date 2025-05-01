@@ -28,7 +28,8 @@ public class UserFactory implements IUserFactory {
                 .password(passwordEncoder.encode("admin"))
                 .role(UserRole.ROLE_ADMIN)
                 .build();
-        admin.setValidated(true);
+        admin.setEmailValidated(true);
+        admin.setValidatedByAdmin(true);
         return admin;
     }
 
@@ -42,7 +43,8 @@ public class UserFactory implements IUserFactory {
                 .password(passwordEncoder.encode("user"))
                 .role(UserRole.ROLE_USER)
                 .build();
-        user.setValidated(true);
+        user.setEmailValidated(true);
+        user.setValidatedByAdmin(true);
         return user;
     }
 
@@ -56,7 +58,8 @@ public class UserFactory implements IUserFactory {
                 .email("random_" + uuid + "@example.com")
                 .password(passwordEncoder.encode("default"))
                 .build();
-        randomUser.setValidated(true);
+        randomUser.setEmailValidated(true);
+        randomUser.setValidatedByAdmin(true);
         return randomUser;
     }
 

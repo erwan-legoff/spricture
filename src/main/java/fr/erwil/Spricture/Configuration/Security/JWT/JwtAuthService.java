@@ -17,7 +17,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.net.URI;
 import java.net.URLEncoder;
@@ -70,10 +69,10 @@ public class JwtAuthService implements IAuthService {
         if(user.isEmpty()) {
             throw new BadCredentialsException("No user found by email for email validation.");
         }
-        if(user.get().isValidated()){
+        if(user.get().isEmailValidated()){
             return true;
         }
-        user.get().setValidated(true);
+        user.get().setEmailValidated(true);
         userRepository.save(user.get());
 
         return true;
@@ -87,7 +86,7 @@ public class JwtAuthService implements IAuthService {
             throw new BaseException(HttpStatus.UNAUTHORIZED, "The user does not exists");
         }
 
-        if(user.get().isValidated()){
+        if(user.get().isEmailValidated()){
             throw new BaseException(HttpStatus.UNAUTHORIZED, "The user is already validated");
         }
 

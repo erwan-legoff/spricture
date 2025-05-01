@@ -54,7 +54,10 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private boolean isValidated;
+    private boolean isEmailValidated;
+
+    @Column(nullable = false)
+    private boolean isValidatedByAdmin;
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
