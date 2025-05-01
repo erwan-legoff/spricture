@@ -102,8 +102,8 @@ public class MediumService  {
 
 
     public void softDelete(SoftDeleteMediumDto softDeleteMediumDto) throws AlreadySoftDeletedException {
-        Medium mediumToSoftDelete = mediumRepository.findById(softDeleteMediumDto.getId()).orElseThrow(
-                () -> new EntityNotFoundException("The medium " + softDeleteMediumDto.getId() + " was not found before soft delete")
+        Medium mediumToSoftDelete = mediumRepository.findById(softDeleteMediumDto.id()).orElseThrow(
+                () -> new EntityNotFoundException("The medium " + softDeleteMediumDto.id() + " was not found before soft delete")
         );
 
         if (mediumToSoftDelete.getDeletedAt() != null) {
