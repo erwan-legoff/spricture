@@ -39,7 +39,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 user.getEmail(),
                 user.getPassword(),
                 authorities,
-                user.isEmailValidated() && user.isValidatedByAdmin()
+                user.getStatus().canLogin()
         );
 
     }

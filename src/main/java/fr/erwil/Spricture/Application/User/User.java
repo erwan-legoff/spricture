@@ -34,7 +34,11 @@ public class User {
         if (this.role == null) {
             this.role = UserRole.ROLE_USER;
         }
+        if (this.status == null) {
+            this.status = UserStatus.CREATED;
+        }
     }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,14 +57,11 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private boolean isEmailValidated;
-
-    @Column(nullable = false)
-    private boolean isValidatedByAdmin;
-
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 
     @Column(updatable = false)
     @CreatedDate
@@ -73,7 +74,6 @@ public class User {
 
     @Setter(AccessLevel.NONE)
     private LocalDateTime deletedAt;
-
 
     @OneToMany(mappedBy = "ownerId")
     private List<Medium> media;

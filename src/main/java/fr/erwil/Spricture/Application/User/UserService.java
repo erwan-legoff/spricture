@@ -3,6 +3,7 @@ package fr.erwil.Spricture.Application.User;
 import fr.erwil.Spricture.Application.User.Dtos.Adapters.CreateUserAdapter;
 import fr.erwil.Spricture.Application.User.Dtos.Requests.CreateUserRequestDto;
 import fr.erwil.Spricture.Application.User.Dtos.Responses.CreateUserResponseDto;
+import fr.erwil.Spricture.Application.User.Dtos.Responses.GetUserResponseDto;
 import fr.erwil.Spricture.Exceptions.User.UserCreationException;
 import fr.erwil.Spricture.Tools.Mail.MailService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,11 +24,16 @@ public class UserService implements IUserService {
     public CreateUserResponseDto create(CreateUserRequestDto user) {
         try {
             User userToCreate = CreateUserAdapter.getUser(user,passwordEncoder.encode(user.getRawPassword()));
+            userToCreate.setStatus(UserStatus.CREATED);
             userRepository.save(userToCreate);
             return CreateUserResponseDto.builder().userCreated(true).build();
         } catch (Exception e) {
             throw new UserCreationException("Error while creating user", e);
         }
+    }
 
+    @Override
+    public GetUserResponseDto getMany() {
+        return null;
     }
 }

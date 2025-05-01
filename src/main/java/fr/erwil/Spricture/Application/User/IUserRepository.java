@@ -7,7 +7,5 @@ import java.util.Optional;
 public interface IUserRepository extends JpaRepository<User, Long> {
     Optional<User> findByPseudo(String pseudo);
     Optional<User> findByEmail(String email);
-    Optional<User> findByPseudoAndIsValidatedTrue(String pseudo);
 
-    Optional<User> findByEmailAndIsValidatedFalse(String email);
 }
