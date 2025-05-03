@@ -2,6 +2,7 @@ package fr.erwil.Spricture.Configuration.Security.JWT;
 
 import fr.erwil.Spricture.Application.User.IUserRepository;
 import fr.erwil.Spricture.Application.User.User;
+import fr.erwil.Spricture.Application.User.UserStatus;
 import fr.erwil.Spricture.Configuration.FrontendProperties;
 import fr.erwil.Spricture.Configuration.Security.Dtos.LoginDto;
 import fr.erwil.Spricture.Configuration.Security.IAuthService;
@@ -69,10 +70,13 @@ public class JwtAuthService implements IAuthService {
         if(user.isEmpty()) {
             throw new BadCredentialsException("No user found by email for email validation.");
         }
-        if(user.get().isEmailValidated()){
+        if(user.get().getStatus().isBlocked()){
+         return false;
+        }
+        if(user.get().getStatus().emailHasBeenValidated()){
             return true;
         }
-        user.get().setEmailValidated(true);
+        user.get().setStatus(UserStatus.EMAIL_VALIDATED);
         userRepository.save(user.get());
 
         return true;
@@ -86,8 +90,12 @@ public class JwtAuthService implements IAuthService {
             throw new BaseException(HttpStatus.UNAUTHORIZED, "The user does not exists");
         }
 
-        if(user.get().isEmailValidated()){
+        if(user.get().getStatus().emailHasBeenValidated()){
             throw new BaseException(HttpStatus.UNAUTHORIZED, "The user is already validated");
+        }
+
+        if(user.get().getStatus().isBlocked()){
+            throw new BaseException(HttpStatus.UNAUTHORIZED, "The user is blocked");
         }
 
         String token = jwtProvider.generateVerifyToken(email);

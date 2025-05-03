@@ -21,8 +21,8 @@ public enum UserStatus {
         return this.rank >= VALIDATED_BY_ADMIN.getRank();
     }
 
-    public boolean canRequestValidationMail() {
-        return this.rank >= CREATED.getRank() && this.rank < EMAIL_VALIDATED.getRank();
+    public boolean emailHasBeenValidated() {
+        return this.rank >= EMAIL_VALIDATED.getRank();
     }
 
     public boolean isBlocked() {
