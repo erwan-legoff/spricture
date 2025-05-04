@@ -5,14 +5,11 @@ import fr.erwil.Spricture.Application.User.Dtos.Adapters.GetManyUsersResponseAda
 import fr.erwil.Spricture.Application.User.Dtos.Requests.CreateUserRequestDto;
 import fr.erwil.Spricture.Application.User.Dtos.Responses.CreateUserResponseDto;
 import fr.erwil.Spricture.Application.User.Dtos.Responses.GetUserResponseDto;
-import fr.erwil.Spricture.Exceptions.User.UserAccountValidationException;
-import fr.erwil.Spricture.Exceptions.User.UserCreationException;
-import fr.erwil.Spricture.Exceptions.User.UserNotFoundException;
+import fr.erwil.Spricture.Exceptions.User.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
@@ -71,6 +68,47 @@ public class UserService implements IUserService {
         userRepository.save(user);
 
         return true;
+    }
+    @Override
+    public boolean block(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+
+        UserStatus status = user.getStatus();
+
+        if (status.isBlocked()) {
+            throw new UserBlockageException(
+                    "User is already blocked. Current status: " + status
+            );
+        }
+
+        user.setStatus(UserStatus.BLOCKED_BY_ADMIN);
+        userRepository.save(user);
+
+        return true;
+    }
+
+    @Override
+    public boolean unblock(Long userId) {
+        User user = getUser(userId);
+
+        UserStatus status = user.getStatus();
+
+        if (!status.isBlocked()) {
+            throw new UserUnblockException(
+                    "User is already unblocked. Current status: " + status
+            );
+        }
+
+        user.setStatus(UserStatus.CREATED);
+        userRepository.save(user);
+
+        return true;
+    }
+
+    private User getUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
     }
 
 

@@ -10,4 +10,8 @@ public interface IUserService {
     CreateUserResponseDto create(CreateUserRequestDto user);
     List<GetUserResponseDto> getMany();
     boolean validateUserAccount(Long userId);
+
+    boolean block(Long userId);
+
+    boolean unblock(Long userId);
 }
