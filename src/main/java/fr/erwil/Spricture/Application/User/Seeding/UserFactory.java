@@ -2,6 +2,7 @@ package fr.erwil.Spricture.Application.User.Seeding;
 
 import fr.erwil.Spricture.Application.User.User;
 import fr.erwil.Spricture.Application.User.UserRole;
+import fr.erwil.Spricture.Application.User.UserStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -28,8 +29,7 @@ public class UserFactory implements IUserFactory {
                 .password(passwordEncoder.encode("admin"))
                 .role(UserRole.ROLE_ADMIN)
                 .build();
-        admin.setEmailValidated(true);
-        admin.setValidatedByAdmin(true);
+        admin.setStatus(UserStatus.VALIDATED_BY_ADMIN);
         return admin;
     }
 
@@ -43,8 +43,7 @@ public class UserFactory implements IUserFactory {
                 .password(passwordEncoder.encode("user"))
                 .role(UserRole.ROLE_USER)
                 .build();
-        user.setEmailValidated(true);
-        user.setValidatedByAdmin(true);
+        user.setStatus(UserStatus.VALIDATED_BY_ADMIN);
         return user;
     }
 
@@ -58,8 +57,7 @@ public class UserFactory implements IUserFactory {
                 .email("random_" + uuid + "@example.com")
                 .password(passwordEncoder.encode("default"))
                 .build();
-        randomUser.setEmailValidated(true);
-        randomUser.setValidatedByAdmin(true);
+        randomUser.setStatus(UserStatus.VALIDATED_BY_ADMIN);
         return randomUser;
     }
 
