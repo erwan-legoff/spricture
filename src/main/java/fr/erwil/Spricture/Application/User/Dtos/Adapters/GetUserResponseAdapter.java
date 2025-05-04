@@ -7,6 +7,7 @@ public class GetUserResponseAdapter {
     public static GetUserResponseDto adapt(User user) {
         Long mediaCount = user.getMedia() != null ? (long) user.getMedia().size() : 0L;
         return GetUserResponseDto.builder()
+                .id(user.getId())
                 .pseudo(user.getPseudo())
                 .name(user.getName())
                 .lastName(user.getLastName())
