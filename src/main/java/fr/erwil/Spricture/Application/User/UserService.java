@@ -1,13 +1,15 @@
 package fr.erwil.Spricture.Application.User;
 
 import fr.erwil.Spricture.Application.User.Dtos.Adapters.CreateUserAdapter;
+import fr.erwil.Spricture.Application.User.Dtos.Adapters.GetManyUsersResponseAdapter;
 import fr.erwil.Spricture.Application.User.Dtos.Requests.CreateUserRequestDto;
 import fr.erwil.Spricture.Application.User.Dtos.Responses.CreateUserResponseDto;
 import fr.erwil.Spricture.Application.User.Dtos.Responses.GetUserResponseDto;
 import fr.erwil.Spricture.Exceptions.User.UserCreationException;
-import fr.erwil.Spricture.Tools.Mail.MailService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService implements IUserService {
@@ -33,7 +35,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public GetUserResponseDto getMany() {
-        return null;
+    public List<GetUserResponseDto> getMany() {
+        return GetManyUsersResponseAdapter.adapt(this.userRepository.findAll());
     }
+
 }
