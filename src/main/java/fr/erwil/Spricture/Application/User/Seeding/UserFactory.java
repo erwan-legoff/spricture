@@ -49,6 +49,11 @@ public class UserFactory implements IUserFactory {
 
     @Override
     public User getRandomUser() {
+        return this.getRandomUser(UserStatus.VALIDATED_BY_ADMIN);
+    }
+
+    @Override
+    public User getRandomUser(UserStatus status){
         String uuid = UUID.randomUUID().toString().substring(0, 8);
         User randomUser = User.builder()
                 .pseudo("user_" + uuid)
@@ -57,7 +62,7 @@ public class UserFactory implements IUserFactory {
                 .email("random_" + uuid + "@example.com")
                 .password(passwordEncoder.encode("default"))
                 .build();
-        randomUser.setStatus(UserStatus.VALIDATED_BY_ADMIN);
+        randomUser.setStatus(status);
         return randomUser;
     }
 
