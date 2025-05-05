@@ -2,6 +2,7 @@ package fr.erwil.Spricture.Configuration.Security.JWT;
 
 import fr.erwil.Spricture.Configuration.Security.Dtos.LoginDto;
 import fr.erwil.Spricture.Configuration.Security.IAuthService;
+import jakarta.validation.constraints.Email;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -46,12 +47,10 @@ public class JwtLoginController {
                 .build();
     }
 
-    @GetMapping("/send-verification-email")
-    public ResponseEntity<Void> verificationEmail(@RequestParam String email) {
+    @PostMapping("/send-verification-email")
+    public ResponseEntity<Void> sendVerificationEmail(@RequestParam @Email String email) {
         authService.sendVerificationEmail(email);
-        return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
-                .build();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/logout")
