@@ -12,4 +12,5 @@ import org.springframework.context.annotation.Configuration;
 public class FrontendProperties {
     String host = "http://localhost:3000/";
     String verifyAccount = "account-validated";
+    String sendMailVerification = "mail-verification";
 }
