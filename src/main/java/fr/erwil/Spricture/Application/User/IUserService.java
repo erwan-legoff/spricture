@@ -14,4 +14,6 @@ public interface IUserService {
     boolean block(Long userId);
 
     boolean unblock(Long userId);
+
+    boolean sendEmailValidation(Long userId);
 }

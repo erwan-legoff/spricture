@@ -5,21 +5,32 @@ import fr.erwil.Spricture.Application.User.Dtos.Adapters.GetManyUsersResponseAda
 import fr.erwil.Spricture.Application.User.Dtos.Requests.CreateUserRequestDto;
 import fr.erwil.Spricture.Application.User.Dtos.Responses.CreateUserResponseDto;
 import fr.erwil.Spricture.Application.User.Dtos.Responses.GetUserResponseDto;
+import fr.erwil.Spricture.Configuration.FrontendProperties;
+import fr.erwil.Spricture.Configuration.Security.IAuthService;
 import fr.erwil.Spricture.Exceptions.User.*;
+import fr.erwil.Spricture.Tools.Mail.MailService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.function.Function;
 
 @Service
 public class UserService implements IUserService {
 
     private final IUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MailService mailService;
+    private final FrontendProperties frontendProperties;
 
-    public UserService(IUserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(IUserRepository userRepository, PasswordEncoder passwordEncoder, MailService mailService, FrontendProperties frontendProperties) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.mailService = mailService;
+        this.frontendProperties = frontendProperties;
     }
 
     @Override
@@ -106,10 +117,45 @@ public class UserService implements IUserService {
         return true;
     }
 
+    @Override
+    public boolean sendEmailValidation(Long userId) {
+        User user = getUser(userId);
+        UserStatus status = user.getStatus();
+
+        if (status.isBlocked()) {
+            throw new UserAccountValidationException(
+                    "Cannot send validation e-mail to a blocked user. Current status: " + status
+            );
+        }
+        if (status.emailHasBeenValidated()) {
+            throw new UserAccountValidationException(
+                    "E-mail already validated. Current status: " + status
+            );
+        }
+        String verifyAccountLink = this.getEmailToUriFunction().apply(user.getEmail()).toString();
+        mailService.sendSimpleMessage(user.getEmail(),"Click on the link to send a mail validation.",verifyAccountLink);
+        return true;
+    }
+
     private User getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
     }
 
+    /**
+     * Builds the public URL (front-end) that the user will click to validate the token.
+     */
+    private Function<String, URI> getEmailToUriFunction() {
+        return email -> {
+            String base = frontendProperties.getHost();
+            if (!base.endsWith("/")) base += "/"; //clean up the host
+
+            String path = frontendProperties.getSendMailVerification();
+            if (path.startsWith("/")) path = path.substring(1); //cleanup the path
+
+            String encoded = URLEncoder.encode(email, StandardCharsets.UTF_8);
+            return URI.create(base + path + "?email=" + email);
+        };
+    }
 
 }

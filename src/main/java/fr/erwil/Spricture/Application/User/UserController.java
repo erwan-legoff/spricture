@@ -48,5 +48,11 @@ public class UserController {
     public ResponseEntity<Boolean> unblock(@PathVariable long id) {
         return ResponseEntity.ok(userService.unblock(id));
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}/send-email-validation")
+    public ResponseEntity<Boolean> sendEmailValidation(@PathVariable long id) {
+        return ResponseEntity.ok(userService.sendEmailValidation(id));
+    }
 }
 
