@@ -3,6 +3,7 @@ package fr.erwil.Spricture.Configuration.Security.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.erwil.Spricture.Configuration.Security.Dtos.LoginDto;
 import fr.erwil.Spricture.Configuration.Security.IAuthService;
+import fr.erwil.Spricture.Configuration.Security.UserDetails.UserDetailsServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,13 +25,16 @@ class JwtLoginControllerTest {
     @Mock
     IAuthService authService;
 
+    @Mock
+    UserDetailsServiceImpl userDetailsService;
+
     MockMvc mvc;
     ObjectMapper mapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
         MockEnvironment env = new MockEnvironment().withProperty("spring.profiles.active", "dev");
-        JwtLoginController controller = new JwtLoginController(authService, env);
+        JwtLoginController controller = new JwtLoginController(authService, userDetailsService, env);
 
         mvc = MockMvcBuilders.standaloneSetup(controller)
                 .build();

@@ -1,18 +1,12 @@
 package fr.erwil.Spricture.Application.Medium;
 
-import fr.erwil.Spricture.Application.Medium.Dtos.Adapters.MediumMultipartFileAdapter;
-import fr.erwil.Spricture.Application.Medium.Dtos.Adapters.SoftDeleteMediumAdapter;
 import fr.erwil.Spricture.Application.Medium.Dtos.Requests.FullDeleteMediumDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.Requests.GetMediumDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.Requests.SoftDeleteMediumDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.Responses.CreateManyResponseDto;
-import fr.erwil.Spricture.Configuration.Security.UserDetails.UserDetailServiceImpl;
+import fr.erwil.Spricture.Configuration.Security.UserDetails.UserDetailsServiceImpl;
 import fr.erwil.Spricture.Exceptions.AlreadySoftDeletedException;
-import fr.erwil.Spricture.Exceptions.Medium.MediumNotFoundException;
 import fr.erwil.Spricture.Exceptions.Medium.MediumProcessingException;
-import fr.erwil.Spricture.Tools.FileStorage.IUuidFileStorage;
-import fr.erwil.Spricture.Tools.FileStorage.UuidFileStorageSimple;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,14 +14,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class MediumOwnerService implements  IMediumService {
@@ -35,8 +22,8 @@ public class MediumOwnerService implements  IMediumService {
     private static final Logger log = LogManager.getLogger(MediumOwnerService.class);
 
     private final MediumService mediumService;
-    private final UserDetailServiceImpl userDetailService;
-    public MediumOwnerService(MediumService mediumService, UserDetailServiceImpl userDetailService){
+    private final UserDetailsServiceImpl userDetailService;
+    public MediumOwnerService(MediumService mediumService, UserDetailsServiceImpl userDetailService){
 
         this.mediumService = mediumService;
         this.userDetailService = userDetailService;

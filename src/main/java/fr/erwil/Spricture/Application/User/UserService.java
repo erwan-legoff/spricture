@@ -4,9 +4,12 @@ import fr.erwil.Spricture.Application.User.Dtos.Adapters.CreateUserAdapter;
 import fr.erwil.Spricture.Application.User.Dtos.Adapters.GetManyUsersResponseAdapter;
 import fr.erwil.Spricture.Application.User.Dtos.Requests.CreateUserRequestDto;
 import fr.erwil.Spricture.Application.User.Dtos.Responses.CreateUserResponseDto;
+import fr.erwil.Spricture.Application.User.Dtos.Responses.GetMeResponseDto;
 import fr.erwil.Spricture.Application.User.Dtos.Responses.GetUserResponseDto;
 import fr.erwil.Spricture.Configuration.FrontendProperties;
 import fr.erwil.Spricture.Configuration.Security.IAuthService;
+import fr.erwil.Spricture.Configuration.Security.UserDetails.CustomUserDetails;
+import fr.erwil.Spricture.Configuration.Security.Utils.EncryptionUtils;
 import fr.erwil.Spricture.Exceptions.User.*;
 import fr.erwil.Spricture.Tools.Mail.MailService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,6 +41,7 @@ public class UserService implements IUserService {
         try {
             User userToCreate = CreateUserAdapter.getUser(user,passwordEncoder.encode(user.getRawPassword()));
             userToCreate.setStatus(UserStatus.CREATED);
+            userToCreate.setSalt(EncryptionUtils.generateSalt());
             userRepository.save(userToCreate);
             return CreateUserResponseDto.builder().userCreated(true).build();
         } catch (Exception e) {
@@ -49,6 +53,8 @@ public class UserService implements IUserService {
     public List<GetUserResponseDto> getMany() {
         return GetManyUsersResponseAdapter.adapt(this.userRepository.findAll());
     }
+
+
 
     @Override
     public boolean validateUserAccount(Long userId) {

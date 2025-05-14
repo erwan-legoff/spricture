@@ -3,6 +3,7 @@ package fr.erwil.Spricture.Application.User.Seeding;
 import fr.erwil.Spricture.Application.User.User;
 import fr.erwil.Spricture.Application.User.UserRole;
 import fr.erwil.Spricture.Application.User.UserStatus;
+import fr.erwil.Spricture.Configuration.Security.Utils.EncryptionUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,7 @@ public class UserFactory implements IUserFactory {
                 .email("admin@company.com")
                 .password(passwordEncoder.encode("admin"))
                 .role(UserRole.ROLE_ADMIN)
+                .salt(EncryptionUtils.generateSalt())
                 .build();
         admin.setStatus(UserStatus.VALIDATED_BY_ADMIN);
         return admin;
@@ -42,6 +44,7 @@ public class UserFactory implements IUserFactory {
                 .email("user@company.com")
                 .password(passwordEncoder.encode("user"))
                 .role(UserRole.ROLE_USER)
+                .salt(EncryptionUtils.generateSalt())
                 .build();
         user.setStatus(UserStatus.VALIDATED_BY_ADMIN);
         return user;
@@ -61,6 +64,7 @@ public class UserFactory implements IUserFactory {
                 .lastName("User")
                 .email("random_" + uuid + "@example.com")
                 .password(passwordEncoder.encode("default"))
+                .salt(EncryptionUtils.generateSalt())
                 .build();
         randomUser.setStatus(status);
         return randomUser;

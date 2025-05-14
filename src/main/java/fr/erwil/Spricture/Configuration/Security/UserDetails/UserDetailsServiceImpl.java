@@ -1,5 +1,7 @@
 package fr.erwil.Spricture.Configuration.Security.UserDetails;
 
+import fr.erwil.Spricture.Application.User.Dtos.Adapters.GetMeAdapter;
+import fr.erwil.Spricture.Application.User.Dtos.Responses.GetMeResponseDto;
 import fr.erwil.Spricture.Application.User.IUserRepository;
 import fr.erwil.Spricture.Application.User.User;
 import org.slf4j.Logger;
@@ -17,13 +19,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class UserDetailServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
 
-    private static final Logger logger = LoggerFactory.getLogger(UserDetailServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
     private final IUserRepository userRepository;
 
-    public UserDetailServiceImpl(IUserRepository userRepository) {
+    public UserDetailsServiceImpl(IUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -51,5 +53,13 @@ public class UserDetailServiceImpl implements UserDetailsService {
         }
         return (CustomUserDetails) authentication.getPrincipal();
     }
+
+    public GetMeResponseDto getMe() {
+        CustomUserDetails userDetails = this.getCurrentUserDetails();
+        User user = userRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new IllegalStateException("No authenticated user found"));
+        return GetMeAdapter.adapt(user);
+    }
+
 
 }

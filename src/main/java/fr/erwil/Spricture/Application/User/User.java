@@ -20,13 +20,14 @@ import java.util.List;
 public class User {
 
     @Builder
-    public User(String pseudo, String name, String lastName, String email, String password, UserRole role) {
+    public User(String pseudo, String name, String lastName, String email, String password, UserRole role, byte[] salt) {
         this.pseudo = pseudo;
         this.name = name;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.salt = salt;
     }
 
     @PrePersist
@@ -50,6 +51,9 @@ public class User {
     private String name;
 
     private String lastName;
+
+    @Column(nullable = false)
+    private byte[] salt;
 
     @Column(nullable = false, unique = true)
     private String email;
