@@ -2,7 +2,9 @@ package fr.erwil.Spricture.Application.User;
 
 import fr.erwil.Spricture.Application.User.Dtos.Requests.CreateUserRequestDto;
 import fr.erwil.Spricture.Application.User.Dtos.Responses.CreateUserResponseDto;
+import fr.erwil.Spricture.Application.User.Dtos.Responses.GetMeResponseDto;
 import fr.erwil.Spricture.Application.User.Dtos.Responses.GetUserResponseDto;
+import fr.erwil.Spricture.Configuration.Security.UserDetails.UserDetailsServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +18,10 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    public UserController(UserService userService) {
+    private final UserDetailsServiceImpl userDetailsService;
+    public UserController(UserService userService, UserDetailsServiceImpl userDetailsService) {
         this.userService = userService;
+        this.userDetailsService = userDetailsService;
     }
 
     @PostMapping
@@ -53,6 +57,11 @@ public class UserController {
     @PutMapping("/{id}/send-email-validation")
     public ResponseEntity<Boolean> sendEmailValidation(@PathVariable long id) {
         return ResponseEntity.ok(userService.sendEmailValidation(id));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<GetMeResponseDto> getMe() {
+        return ResponseEntity.ok(userDetailsService.getMe());
     }
 }
 

@@ -78,11 +78,7 @@ public class JwtLoginController {
                 .build();
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/me")
-    public ResponseEntity<GetMeResponseDto> getMe() {
-        return ResponseEntity.ok(userDetailsService.getMe());
-    }
+
 
 
 
