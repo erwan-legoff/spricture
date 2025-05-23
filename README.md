@@ -42,7 +42,8 @@ This changelog tracks the main milestones and version evolution of the **Sprictu
 - [X] User can delete photos
 - [X] User registration by admin validation
 - [X] Add a basic permission system (roles only)
-- [ ] Implement photo encryption before storage
+- [X] Implement photo encryption before storage
+- [X] PIN usage to wrap the master key that encrypt photo
 - [ ] More check of ownership (ex: deleting)
 
 ---
