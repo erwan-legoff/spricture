@@ -44,6 +44,7 @@ This changelog tracks the main milestones and version evolution of the **Sprictu
 - [X] Add a basic permission system (roles only)
 - [X] Implement photo encryption before storage
 - [X] PIN usage to wrap the master key that encrypt photo
+- [ ] Translating into french/english
 - [ ] More check of ownership (ex: deleting)
 
 ---
