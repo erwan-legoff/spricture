@@ -3,6 +3,10 @@ package fr.erwil.Spricture.Tools.FileStorage.S3;
 import fr.erwil.Spricture.Exceptions.UuidFileStorage.UploadException;
 import fr.erwil.Spricture.Tools.FileStorage.IUuidFileStorage;
 import fr.erwil.Spricture.Exceptions.UuidFileStorage.FileAlreadyExistsException;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.awscore.exception.AwsServiceException;
 import software.amazon.awssdk.core.exception.SdkClientException;
@@ -15,7 +19,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
-
+@Primary
+@Qualifier("s3")
+@Service
 public class UUIDFileStorageS3 implements IUuidFileStorage {
     private final S3Client s3Client;
     private final S3StorageProperties properties;

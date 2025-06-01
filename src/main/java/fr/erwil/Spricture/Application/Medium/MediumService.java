@@ -34,7 +34,7 @@ public class MediumService  {
     private static final Logger log = LogManager.getLogger(MediumService.class);
     private final IUuidFileStorage fileStorage;
     private final  IMediumRepository mediumRepository;
-    public MediumService(UuidFileStorageSimple fileStorage, IMediumRepository mediumRepository){
+    public MediumService(IUuidFileStorage fileStorage, IMediumRepository mediumRepository){
         this.fileStorage = fileStorage;
         this.mediumRepository = mediumRepository;
     }

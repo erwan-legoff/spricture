@@ -2,6 +2,7 @@ package fr.erwil.Spricture.Tools.FileStorage;
 
 import fr.erwil.Spricture.Exceptions.UuidFileStorage.FileAlreadyExistsException;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,7 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
-
+@Qualifier("simple")
 @Service
 public class UuidFileStorageSimple implements IUuidFileStorage{
     private final Path root;
