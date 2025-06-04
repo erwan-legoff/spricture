@@ -127,8 +127,12 @@ public class UUIDFileStorageS3 implements IUuidFileStorage {
         var s3Objects = s3Client.listObjectsV2(req->req.bucket(properties.getBucket()));
         var streamedObjects = s3Objects.contents().stream();
         List<ObjectIdentifier> keys = streamedObjects.map(s3Object -> ObjectIdentifier.builder().key(s3Object.key()).build()).toList();
-        DeleteObjectsRequest request = DeleteObjectsRequest.builder().bucket(properties.getBucket()).delete(delete -> delete.objects(keys)).build();
-        s3Client.deleteObjects(request);
+        try {
+            DeleteObjectsRequest request = DeleteObjectsRequest.builder().bucket(properties.getBucket()).delete(delete -> delete.objects(keys)).build();
+            s3Client.deleteObjects(request);
+        } catch (AwsServiceException |  SdkClientException e) {
+            throw new UploadException("Error while deleting aws files.",e);
+        }
     }
 
     private static void deleteAllTempFiles() {
