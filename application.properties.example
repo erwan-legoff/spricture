@@ -20,7 +20,8 @@ file.storage.location=./medias
 
 # Security Config
 security.jwt.secret-key=
-security.jwt.expiration-milliseconds=3600000
+security.jwt.login-expiration-milliseconds=3600000
+security.jwt.validate-expiration-milliseconds=600000
 
 logging.level.org.springframework.web=DEBUG
 
