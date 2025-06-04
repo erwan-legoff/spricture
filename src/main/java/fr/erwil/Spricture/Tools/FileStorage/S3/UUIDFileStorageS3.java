@@ -110,7 +110,7 @@ public class UUIDFileStorageS3 implements IUuidFileStorage {
 
 
     @Override
-    public void delete(UUID uuid) throws IOException {
+    public void delete(UUID uuid)  {
         try {
             s3Client.deleteObject(req-> req.bucket(properties.getBucket()).key(uuid.toString()));
         } catch (AwsServiceException | SdkClientException e) {
