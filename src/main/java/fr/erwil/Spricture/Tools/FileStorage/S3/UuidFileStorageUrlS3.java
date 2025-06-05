@@ -24,7 +24,6 @@ public class UuidFileStorageUrlS3 implements IUuidFileStorageUrl {
         return fileStorage.save(file, uuid);
     }
 
-    // TODO : Passer en String :)
     @Override
     public URL getLink(UUID uuid) {
         return linkSigner.createPresignedGetUrl(properties.getBucket(),uuid.toString());
