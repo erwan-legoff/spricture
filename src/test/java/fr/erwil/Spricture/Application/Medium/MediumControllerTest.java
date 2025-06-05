@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MediumControllerTest {
 
     @MockBean
-    IMediumService mediumService; // The service is needed for the controller
+    IMediumScopedService mediumService; // The service is needed for the controller
 
     @Autowired
     private MockMvc mockMvc;
