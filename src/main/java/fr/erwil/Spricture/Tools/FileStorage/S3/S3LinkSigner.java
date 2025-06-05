@@ -14,10 +14,15 @@ import java.time.Duration;
 @Component
 public class S3LinkSigner {
     private static final Logger logger = LogManager.getLogger(S3LinkSigner.class);
+    private final S3Presigner presigner;
+
+    public S3LinkSigner(S3Presigner presigner) {
+        this.presigner = presigner;
+    }
 
     public URL createPresignedGetUrl(String bucketName, String keyName) {
 
-        try (S3Presigner presigner = S3Presigner.create()) {
+        try (presigner) {
 
             GetObjectRequest objectRequest = GetObjectRequest.builder()
                     .bucket(bucketName)

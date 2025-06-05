@@ -1,5 +1,6 @@
 package fr.erwil.Spricture.Application.Medium.MediumUrl;
 
+import fr.erwil.Spricture.Application.Medium.Dtos.Adapters.GetMediumLinkAdapter;
 import fr.erwil.Spricture.Application.Medium.Dtos.Requests.FullDeleteMediumDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.Requests.SoftDeleteMediumDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.Responses.CreateManyResponseDto;
@@ -43,13 +44,13 @@ public class MediumUrlService implements IMediumUrlService{
 
     @Override
     public GetMediumLinkResponseDto getURL(UUID uuid) {
-        return GetMediumLinkResponseDto.builder().url(fileStorageUrl.getLink(uuid)).uuid(uuid).build();
+        return GetMediumLinkResponseDto.builder().url(fileStorageUrl.getLink(uuid).toExternalForm()).id(uuid).build();
     }
 
     @Override
     public List<GetMediumLinkResponseDto> getURLs(long ownerId) {
-        List<UUID> uuids = mediumRepository.findIdByOwnerIdAndDeletedAtIsNull(ownerId);
-        return uuids.stream().map(this::getURL).toList();
+        List<Medium> media = mediumRepository.findByOwnerIdAndDeletedAtIsNull(ownerId);
+        return media.stream().map(medium -> GetMediumLinkAdapter.from(medium,fileStorageUrl.getLink(medium.getId()))).toList();
     }
 
     @Override

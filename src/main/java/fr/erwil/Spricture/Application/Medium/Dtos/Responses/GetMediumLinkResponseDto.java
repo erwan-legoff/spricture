@@ -6,5 +6,5 @@ import java.net.URL;
 import java.util.UUID;
 
 @Builder
-public record GetMediumLinkResponseDto(UUID uuid, URL url) {
+public record GetMediumLinkResponseDto(UUID id, String url) {
 }
