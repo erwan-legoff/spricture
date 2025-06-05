@@ -9,12 +9,13 @@ import fr.erwil.Spricture.Configuration.Security.UserDetails.UserDetailsServiceI
 import fr.erwil.Spricture.Exceptions.AlreadySoftDeletedException;
 import fr.erwil.Spricture.Exceptions.Medium.MediumProcessingException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URL;
 import java.util.List;
 import java.util.UUID;
-
+@Service
 public class MediumUrlScopedService implements IMediumUrlScopedService {
     private final IMediumUrlService mediumUrlService;
     private final UserDetailsServiceImpl userDetailService;

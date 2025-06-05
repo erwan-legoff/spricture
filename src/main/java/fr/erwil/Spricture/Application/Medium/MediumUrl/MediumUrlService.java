@@ -11,12 +11,14 @@ import fr.erwil.Spricture.Exceptions.AlreadySoftDeletedException;
 import fr.erwil.Spricture.Exceptions.Medium.MediumProcessingException;
 import fr.erwil.Spricture.Tools.FileStorage.IUuidFileStorageUrl;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URL;
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class MediumUrlService implements IMediumUrlService{
 
     private final MediumService mediumService;
