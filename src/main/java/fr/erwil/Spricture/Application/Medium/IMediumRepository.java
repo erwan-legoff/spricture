@@ -7,5 +7,6 @@ import java.util.UUID;
 
 public interface IMediumRepository extends JpaRepository<Medium, UUID> {
     List<Medium> findByOwnerIdAndDeletedAtIsNull(Long ownerId);
-    List<Medium> findByOwnerIdAndDeletedAtIsNotNull(Long ownerId);
+    List<UUID> findIdByOwnerIdAndDeletedAtIsNull(Long ownerId);
+
 }
