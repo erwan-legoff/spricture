@@ -2,17 +2,13 @@ package fr.erwil.Spricture.Application.Medium;
 
 import fr.erwil.Spricture.Application.Medium.Dtos.Requests.SoftDeleteMediumDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.Responses.CreateManyResponseDto;
-import fr.erwil.Spricture.Application.Medium.Dtos.Requests.GetMediumDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.Responses.GetMediumLinkResponseDto;
 import fr.erwil.Spricture.Application.Medium.MediumUrl.IMediumUrlScopedService;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +19,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @RestController
 public class MediumController {

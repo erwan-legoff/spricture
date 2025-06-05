@@ -10,7 +10,6 @@ import fr.erwil.Spricture.Exceptions.AlreadySoftDeletedException;
 import fr.erwil.Spricture.Exceptions.Medium.MediumNotFoundException;
 import fr.erwil.Spricture.Exceptions.Medium.MediumProcessingException;
 import fr.erwil.Spricture.Tools.FileStorage.IUuidFileStorage;
-import fr.erwil.Spricture.Tools.FileStorage.S3.S3LinkSigner;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
@@ -21,8 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
