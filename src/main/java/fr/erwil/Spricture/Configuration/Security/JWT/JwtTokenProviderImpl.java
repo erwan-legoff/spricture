@@ -25,7 +25,7 @@ public class JwtTokenProviderImpl implements IJwtTokenProvider {
     public JwtTokenProviderImpl(SecurityJwtProperties properties) {
         this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(properties.getSecretKey()));
         this.loginExpirationMilliseconds = properties.getLoginExpirationMilliseconds();
-        this.verifyExpirationMilliseconds = properties.getLoginExpirationMilliseconds();
+        this.verifyExpirationMilliseconds = properties.getValidateExpirationMilliseconds();
 
     }
 

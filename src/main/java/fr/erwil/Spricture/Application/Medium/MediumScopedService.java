@@ -17,13 +17,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Service
-public class MediumOwnerService implements  IMediumService {
+public class MediumScopedService implements IMediumScopedService {
 
-    private static final Logger log = LogManager.getLogger(MediumOwnerService.class);
+    private static final Logger log = LogManager.getLogger(MediumScopedService.class);
 
     private final MediumService mediumService;
     private final UserDetailsServiceImpl userDetailService;
-    public MediumOwnerService(MediumService mediumService, UserDetailsServiceImpl userDetailService){
+    public MediumScopedService(MediumService mediumService, UserDetailsServiceImpl userDetailService){
 
         this.mediumService = mediumService;
         this.userDetailService = userDetailService;

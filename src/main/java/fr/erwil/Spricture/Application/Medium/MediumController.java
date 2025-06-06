@@ -2,15 +2,13 @@ package fr.erwil.Spricture.Application.Medium;
 
 import fr.erwil.Spricture.Application.Medium.Dtos.Requests.SoftDeleteMediumDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.Responses.CreateManyResponseDto;
-import fr.erwil.Spricture.Application.Medium.Dtos.Requests.GetMediumDto;
+import fr.erwil.Spricture.Application.Medium.Dtos.Responses.GetMediumLinkResponseDto;
+import fr.erwil.Spricture.Application.Medium.MediumUrl.IMediumUrlScopedService;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,15 +19,14 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @RestController
 public class MediumController {
     private static final Logger logger = LoggerFactory.getLogger(MediumController.class);
 
-    private final IMediumService mediumService;
+    private final IMediumUrlScopedService mediumService;
 
-    public MediumController(IMediumService mediumService){
+    public MediumController(IMediumUrlScopedService mediumService){
         this.mediumService=mediumService;
     }
 
@@ -49,20 +46,12 @@ public class MediumController {
     public ResponseEntity<Medium> createMedium(@RequestParam("medium") @NotNull  MultipartFile medium) {
         logger.info("Received request to create new medium");
 
-        Medium createdMedium = createOneMedium(medium);
+        Medium createdMedium = mediumService.create(medium);
 
         return new ResponseEntity<>(createdMedium, HttpStatus.CREATED);
 
     }
 
-    private Medium createOneMedium(MultipartFile medium) {
-        logger.debug("File details - Name: {}, Size: {} bytes", medium.getOriginalFilename(), medium.getSize());
-
-        Medium createdMedium = mediumService.create(medium);
-
-        logger.info("Successfully created medium with ID: {}", createdMedium.getId());
-        return createdMedium;
-    }
 
     @PostMapping("/media")
     public ResponseEntity<CreateManyResponseDto> createMedia(@RequestParam("media") @NotNull  List<MultipartFile> media) {
@@ -73,36 +62,17 @@ public class MediumController {
     }
 
     @GetMapping("/medium")
-    public ResponseEntity<Resource> getMedium(@RequestParam("id") @NotNull @NotEmpty String id){
+    public ResponseEntity<GetMediumLinkResponseDto> getMedium(@RequestParam("id") @NotNull @NotEmpty String id){
         logger.info("Received request to get a medium");
-            GetMediumDto getMediumDto = new GetMediumDto(UUID.fromString(id));
-            InputStreamResource resource =  mediumService.getFile(getMediumDto);
-
-            MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
-
             return ResponseEntity.ok()
-                    .contentType(mediaType)
-                    .body(resource);
+                    .body(mediumService.getURL(UUID.fromString(id)));
     }
 
     @GetMapping("/media")
-    public ResponseEntity<List<URI>> getMedia(){
+    public ResponseEntity<List<GetMediumLinkResponseDto>> getMedia(){
         logger.info("Received request to get all media");
-        try {
-            List<Medium> media =  mediumService.getMedia();
-            logger.info("length {}", media.size());
-            logger.info(media.toString());
-          List<URI> uris =  media
-                  .stream()
-                  .map(getMediumToUriFunction())
-                  .collect(Collectors.toList());
-
-            return ResponseEntity.ok(uris);
-
-        }catch (Exception e) {
-            logger.error("An unexpected error occurred while getting a medium", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok()
+                .body(mediumService.getURLs());
     }
 
     /**

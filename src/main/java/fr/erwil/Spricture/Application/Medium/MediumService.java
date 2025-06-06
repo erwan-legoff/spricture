@@ -10,7 +10,6 @@ import fr.erwil.Spricture.Exceptions.AlreadySoftDeletedException;
 import fr.erwil.Spricture.Exceptions.Medium.MediumNotFoundException;
 import fr.erwil.Spricture.Exceptions.Medium.MediumProcessingException;
 import fr.erwil.Spricture.Tools.FileStorage.IUuidFileStorage;
-import fr.erwil.Spricture.Tools.FileStorage.UuidFileStorageSimple;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
@@ -29,12 +28,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class MediumService  {
+public class MediumService implements IMediumService  {
 
     private static final Logger log = LogManager.getLogger(MediumService.class);
     private final IUuidFileStorage fileStorage;
     private final  IMediumRepository mediumRepository;
-    public MediumService(UuidFileStorageSimple fileStorage, IMediumRepository mediumRepository){
+    public MediumService(IUuidFileStorage fileStorage, IMediumRepository mediumRepository){
         this.fileStorage = fileStorage;
         this.mediumRepository = mediumRepository;
     }
