@@ -39,7 +39,7 @@ public class AppStatUserInitializer implements CommandLineRunner {
                     .storageQuota(properties.getAppQuota())
                     .build();
             user.setStatus(UserStatus.BLOCKED_BY_ADMIN);
-            User created = userRepository.save(user);
+            User created = userRepository.saveAndFlush(user);
             mediumStatService.create(created.getId());
             return created;
         });
