@@ -3,7 +3,6 @@ package fr.erwil.Spricture.Application.Medium.MediumStat;
 import fr.erwil.Spricture.Application.Medium.MediumStat.Dtos.StorageUsageResponseDto;
 import fr.erwil.Spricture.Application.User.IUserRepository;
 import fr.erwil.Spricture.Application.User.User;
-import fr.erwil.Spricture.Exceptions.Medium.MediumStat.MediumStatNotFoundException;
 import fr.erwil.Spricture.Exceptions.User.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -61,17 +60,18 @@ public class MediumStatService implements IMediumStatService {
 
     @Transactional
     @Override
-    public void create(long userId) {
+    public MediumStat create(long userId) {
         MediumStat mediumStat = new MediumStat();
-        mediumStat.setStorageUsage(this.computeStorageUsage(userId).actualNewUsageStorage());
         mediumStat.setUser(getUser(userId));
         mediumStatRepository.save(mediumStat);
+        this.computeStorageUsage(userId);
+        return mediumStat;
     }
 
     private MediumStat getMediumStat(long userId) {
         return mediumStatRepository
                 .findByUser_Id(userId)
-                .orElseThrow(() -> new MediumStatNotFoundException(userId));
+                .orElseGet(() -> create(userId));
     }
 
     private User getUser(long userId) {

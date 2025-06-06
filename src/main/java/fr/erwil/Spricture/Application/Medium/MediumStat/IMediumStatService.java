@@ -7,5 +7,5 @@ public interface IMediumStatService {
     void decreaseStorageUsage(long userId, long bytesDeleted);
     StorageUsageResponseDto computeStorageUsage(long userId);
     StorageUsageResponseDto computeFullStorageUsage();
-    void create(long userId);
+    MediumStat create(long userId);
 }

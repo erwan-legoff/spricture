@@ -1,5 +1,6 @@
 package fr.erwil.Spricture.Application.User;
 
+import fr.erwil.Spricture.Application.Medium.MediumStat.IMediumStatService;
 import fr.erwil.Spricture.Application.User.Dtos.Adapters.CreateUserAdapter;
 import fr.erwil.Spricture.Application.User.Dtos.Adapters.GetManyUsersResponseAdapter;
 import fr.erwil.Spricture.Application.User.Dtos.Requests.CreateUserRequestDto;
@@ -12,6 +13,7 @@ import fr.erwil.Spricture.Configuration.Security.UserDetails.CustomUserDetails;
 import fr.erwil.Spricture.Configuration.Security.Utils.EncryptionUtils;
 import fr.erwil.Spricture.Exceptions.User.*;
 import fr.erwil.Spricture.Tools.Mail.MailService;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +25,15 @@ import java.util.function.Function;
 
 @Service
 public class UserService implements IUserService {
+    private final IMediumStatService mediumStatService;
     private final UserProperties userProperties;
     private final IUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final FrontendProperties frontendProperties;
 
-    public UserService(UserProperties userProperties, IUserRepository userRepository, PasswordEncoder passwordEncoder, MailService mailService, FrontendProperties frontendProperties) {
+    public UserService(IMediumStatService mediumStatService, UserProperties userProperties, IUserRepository userRepository, PasswordEncoder passwordEncoder, MailService mailService, FrontendProperties frontendProperties) {
+        this.mediumStatService = mediumStatService;
         this.userProperties = userProperties;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -37,6 +41,7 @@ public class UserService implements IUserService {
         this.frontendProperties = frontendProperties;
     }
 
+    @Transactional
     @Override
     public CreateUserResponseDto create(CreateUserRequestDto user) {
         try {
@@ -44,7 +49,9 @@ public class UserService implements IUserService {
             userToCreate.setStatus(UserStatus.CREATED);
             userToCreate.setSalt(EncryptionUtils.generateSalt());
             userToCreate.setStorageQuota(userProperties.getDefaultQuota()*1000*1000*1000);
-            userRepository.save(userToCreate);
+            User createdUser = userRepository.save(userToCreate);
+            mediumStatService.create(createdUser.getId());
+
             return CreateUserResponseDto.builder().userCreated(true).build();
         } catch (Exception e) {
             throw new UserCreationException("Error while creating user", e);

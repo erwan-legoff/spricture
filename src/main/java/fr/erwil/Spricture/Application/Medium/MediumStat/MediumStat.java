@@ -2,10 +2,7 @@ package fr.erwil.Spricture.Application.Medium.MediumStat;
 
 import fr.erwil.Spricture.Application.AbstractEntity;
 import fr.erwil.Spricture.Application.User.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +10,7 @@ import lombok.Setter;
 public class MediumStat extends AbstractEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
     @Setter
