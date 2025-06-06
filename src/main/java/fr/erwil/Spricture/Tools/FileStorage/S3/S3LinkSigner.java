@@ -2,6 +2,7 @@ package fr.erwil.Spricture.Tools.FileStorage.S3;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
@@ -11,6 +12,7 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequ
 import java.net.URL;
 import java.time.Duration;
 @Component
+@ConditionalOnProperty(name = "storage.type", havingValue = "s3", matchIfMissing = true)
 public class S3LinkSigner {
     private static final Logger logger = LogManager.getLogger(S3LinkSigner.class);
     private final S3Presigner presigner;
