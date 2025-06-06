@@ -43,13 +43,16 @@ public class MediumService implements IMediumService  {
     }
 
     @Transactional
+    @Override
     public Medium create(MultipartFile multipartFile, Long ownerId) throws MediumProcessingException {
         Medium mediumToCreate =  MediumMultipartFileAdapter.getMedium(multipartFile);
         mediumToCreate.setOwnerId(ownerId);
-        var storageUsage =  mediumStatService.increaseStorageUsage(ownerId, multipartFile.getSize());
-        if(storageUsage.isEstimatedStorageLimitReached()){
-            throw new UserStorageQuotaExceededException(ownerId);
+        var storageUsage = mediumStatService.increaseStorageUsage(ownerId, multipartFile.getSize());
+
+        if (storageUsage.isEstimatedStorageLimitReached()) {
+            throw new UserStorageQuotaExceededException(ownerId, storageUsage, multipartFile.getSize());
         }
+
         Medium mediumCreated = mediumRepository.save(mediumToCreate);
 
         try {

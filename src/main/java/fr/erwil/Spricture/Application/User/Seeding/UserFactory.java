@@ -30,6 +30,7 @@ public class UserFactory implements IUserFactory {
                 .password(passwordEncoder.encode("admin"))
                 .role(UserRole.ROLE_ADMIN)
                 .salt(EncryptionUtils.generateSalt())
+                .storageQuota(2L)
                 .build();
         admin.setStatus(UserStatus.VALIDATED_BY_ADMIN);
         return admin;
@@ -45,6 +46,7 @@ public class UserFactory implements IUserFactory {
                 .password(passwordEncoder.encode("user"))
                 .role(UserRole.ROLE_USER)
                 .salt(EncryptionUtils.generateSalt())
+                .storageQuota(1L)
                 .build();
         user.setStatus(UserStatus.VALIDATED_BY_ADMIN);
         return user;
@@ -65,6 +67,7 @@ public class UserFactory implements IUserFactory {
                 .email("random_" + uuid + "@example.com")
                 .password(passwordEncoder.encode("default"))
                 .salt(EncryptionUtils.generateSalt())
+                .storageQuota(1L)
                 .build();
         randomUser.setStatus(status);
         return randomUser;

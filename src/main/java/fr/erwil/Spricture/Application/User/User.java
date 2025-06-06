@@ -21,7 +21,7 @@ import java.util.List;
 public class User {
 
     @Builder
-    public User(String pseudo, String name, String lastName, String email, String password, UserRole role, byte[] salt) {
+    public User(String pseudo, String name, String lastName, String email, String password, UserRole role, byte[] salt, long storageQuota) {
         this.pseudo = pseudo;
         this.name = name;
         this.lastName = lastName;
@@ -29,6 +29,7 @@ public class User {
         this.password = password;
         this.role = role;
         this.salt = salt;
+        this.storageQuota = storageQuota;
     }
 
     @PrePersist
