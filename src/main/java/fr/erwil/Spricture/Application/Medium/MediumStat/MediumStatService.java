@@ -3,6 +3,7 @@ package fr.erwil.Spricture.Application.Medium.MediumStat;
 import fr.erwil.Spricture.Application.Medium.MediumStat.Dtos.StorageUsageResponseDto;
 import fr.erwil.Spricture.Application.User.IUserRepository;
 import fr.erwil.Spricture.Application.User.User;
+import fr.erwil.Spricture.Application.Medium.MediumStat.MediumStatProperties;
 import fr.erwil.Spricture.Exceptions.User.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ public class MediumStatService implements IMediumStatService {
 
     private final IMediumStatRepository mediumStatRepository;
     private final IUserRepository userRepository;
+    private final MediumStatProperties mediumStatProperties;
 
     @Transactional
     @Override
@@ -55,7 +57,18 @@ public class MediumStatService implements IMediumStatService {
 
     @Override
     public StorageUsageResponseDto computeFullStorageUsage() {
-        return null;
+        User appUser = userRepository.findByPseudo(mediumStatProperties.getAppPseudo())
+                .orElseThrow(() -> new UserNotFoundException("App stat user not found"));
+
+        long usage = mediumStatRepository
+                .sumStorageUsageExceptUserId(appUser.getId())
+                .orElse(0L);
+
+        MediumStat mediumStat = getMediumStat(appUser.getId());
+        mediumStat.setStorageUsage(usage);
+
+        long quota = goToBytes(appUser.getStorageQuota());
+        return buildStorageUsageResponse(usage, quota);
     }
 
     @Transactional
