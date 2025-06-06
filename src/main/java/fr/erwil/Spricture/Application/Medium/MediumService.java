@@ -6,9 +6,11 @@ import fr.erwil.Spricture.Application.Medium.Dtos.Requests.FullDeleteMediumDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.Requests.GetMediumDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.Requests.SoftDeleteMediumDto;
 import fr.erwil.Spricture.Application.Medium.Dtos.Responses.CreateManyResponseDto;
+import fr.erwil.Spricture.Application.Medium.MediumStat.IMediumStatService;
 import fr.erwil.Spricture.Exceptions.AlreadySoftDeletedException;
 import fr.erwil.Spricture.Exceptions.Medium.MediumNotFoundException;
 import fr.erwil.Spricture.Exceptions.Medium.MediumProcessingException;
+import fr.erwil.Spricture.Exceptions.Medium.UserStorageQuotaExceededException;
 import fr.erwil.Spricture.Tools.FileStorage.IUuidFileStorage;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -33,16 +35,21 @@ public class MediumService implements IMediumService  {
     private static final Logger log = LogManager.getLogger(MediumService.class);
     private final IUuidFileStorage fileStorage;
     private final  IMediumRepository mediumRepository;
-    public MediumService(IUuidFileStorage fileStorage, IMediumRepository mediumRepository){
+    private final IMediumStatService mediumStatService;
+    public MediumService(IUuidFileStorage fileStorage, IMediumRepository mediumRepository, IMediumStatService mediumStatService){
         this.fileStorage = fileStorage;
         this.mediumRepository = mediumRepository;
+        this.mediumStatService = mediumStatService;
     }
 
     @Transactional
     public Medium create(MultipartFile multipartFile, Long ownerId) throws MediumProcessingException {
         Medium mediumToCreate =  MediumMultipartFileAdapter.getMedium(multipartFile);
         mediumToCreate.setOwnerId(ownerId);
-
+        var storageUsage =  mediumStatService.increaseStorageUsage(ownerId, multipartFile.getSize());
+        if(storageUsage.isEstimatedStorageLimitReached()){
+            throw new UserStorageQuotaExceededException(ownerId);
+        }
         Medium mediumCreated = mediumRepository.save(mediumToCreate);
 
         try {

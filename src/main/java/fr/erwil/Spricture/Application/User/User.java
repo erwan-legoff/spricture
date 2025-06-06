@@ -1,6 +1,7 @@
 package fr.erwil.Spricture.Application.User;
 
 import fr.erwil.Spricture.Application.Medium.Medium;
+import fr.erwil.Spricture.Application.Medium.MediumStat.MediumStat;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -52,6 +53,10 @@ public class User {
 
     private String lastName;
 
+    @Setter
+    @Getter
+    private long storageQuota;
+
     @Column(nullable = false)
     private byte[] salt;
 
@@ -81,4 +86,7 @@ public class User {
 
     @OneToMany(mappedBy = "ownerId")
     private List<Medium> media;
+
+    @OneToOne(mappedBy = "user")
+    private MediumStat mediumStat;
 }
