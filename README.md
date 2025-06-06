@@ -16,7 +16,15 @@ You'll be able to have as many spaces (Family / Friends / Work / Someone ) as gr
 
 You'll be able to add tags to organize your photos. 
 
+
 And maybe eventually a local AI could locally and privately extract more metadata to greatly improve search accuracy.
+
+## Configuration
+
+Copy `application.properties.example` to `application.properties` and adjust the values to match your environment. In particular, JWT related expirations can be tuned with the following keys:
+
+- `security.jwt.login-expiration-milliseconds`
+- `security.jwt.validate-expiration-milliseconds`
 
 # 📦 Changelog – Spricture
 
