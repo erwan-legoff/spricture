@@ -23,13 +23,14 @@ import java.util.function.Function;
 
 @Service
 public class UserService implements IUserService {
-
+    private final UserProperties userProperties;
     private final IUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final FrontendProperties frontendProperties;
 
-    public UserService(IUserRepository userRepository, PasswordEncoder passwordEncoder, MailService mailService, FrontendProperties frontendProperties) {
+    public UserService(UserProperties userProperties, IUserRepository userRepository, PasswordEncoder passwordEncoder, MailService mailService, FrontendProperties frontendProperties) {
+        this.userProperties = userProperties;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.mailService = mailService;
@@ -42,6 +43,7 @@ public class UserService implements IUserService {
             User userToCreate = CreateUserAdapter.getUser(user,passwordEncoder.encode(user.getRawPassword()));
             userToCreate.setStatus(UserStatus.CREATED);
             userToCreate.setSalt(EncryptionUtils.generateSalt());
+            userToCreate.setStorageQuota(userProperties.getDefaultQuota()*1000*1000*1000);
             userRepository.save(userToCreate);
             return CreateUserResponseDto.builder().userCreated(true).build();
         } catch (Exception e) {
