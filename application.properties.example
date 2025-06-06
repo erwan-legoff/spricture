@@ -45,4 +45,5 @@ medium.stat.app-pseudo=APP_STAT
 medium.stat.app-password=changeme
 medium.stat.app-email=app_stat@example.com
 medium.stat.app-quota=10
+medium.stat.quota-threshold-percent=90
 

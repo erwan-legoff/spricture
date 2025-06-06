@@ -4,6 +4,7 @@ import fr.erwil.Spricture.Application.Medium.MediumStat.Dtos.StorageUsageRespons
 import fr.erwil.Spricture.Application.User.IUserRepository;
 import fr.erwil.Spricture.Application.User.User;
 import fr.erwil.Spricture.Application.Medium.MediumStat.MediumStatProperties;
+import fr.erwil.Spricture.Exceptions.Medium.TotalAppStorageQuotaExceededException;
 import fr.erwil.Spricture.Exceptions.User.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,11 @@ public class MediumStatService implements IMediumStatService {
             return buildEstimationStorageResponse(originalUsage, estimatedUsage, quotaInBytes);
         }
 
+        StorageUsageResponseDto appUsage = increaseFullStorage(bytesAdded);
+        if (appUsage.isEstimatedStorageLimitReached()) {
+            throw new TotalAppStorageQuotaExceededException(appUsage, bytesAdded);
+        }
+
         mediumStat.setStorageUsage(estimatedUsage);
         return buildStorageUsageResponse(estimatedUsage, quotaInBytes);
     }
@@ -42,6 +48,7 @@ public class MediumStatService implements IMediumStatService {
     public void decreaseStorageUsage(long userId, long bytesDeleted) {
         MediumStat mediumStat = getMediumStat(userId);
         mediumStat.setStorageUsage(mediumStat.getStorageUsage() - bytesDeleted);
+        decreaseFullStorage(bytesDeleted);
     }
 
     @Transactional
@@ -122,6 +129,32 @@ public class MediumStatService implements IMediumStatService {
 
     private long goToBytes(long go) {
         return go * 1_000_000_000;
+    }
+
+    private StorageUsageResponseDto increaseFullStorage(long bytesAdded) {
+        User appUser = userRepository.findByPseudo(mediumStatProperties.getAppPseudo())
+                .orElseThrow(() -> new UserNotFoundException("App stat user not found"));
+
+        MediumStat mediumStat = getMediumStat(appUser.getId());
+        long originalUsage = mediumStat.getStorageUsage();
+        long estimatedUsage = originalUsage + bytesAdded;
+
+        long quotaInBytes = goToBytes(appUser.getStorageQuota());
+        long threshold = (quotaInBytes * mediumStatProperties.getQuotaThresholdPercent()) / 100;
+
+        if (estimatedUsage >= threshold) {
+            return buildEstimationStorageResponse(originalUsage, estimatedUsage, quotaInBytes);
+        }
+
+        mediumStat.setStorageUsage(estimatedUsage);
+        return buildStorageUsageResponse(estimatedUsage, quotaInBytes);
+    }
+
+    private void decreaseFullStorage(long bytesDeleted) {
+        User appUser = userRepository.findByPseudo(mediumStatProperties.getAppPseudo())
+                .orElseThrow(() -> new UserNotFoundException("App stat user not found"));
+        MediumStat mediumStat = getMediumStat(appUser.getId());
+        mediumStat.setStorageUsage(Math.max(mediumStat.getStorageUsage() - bytesDeleted, 0));
     }
 
 }

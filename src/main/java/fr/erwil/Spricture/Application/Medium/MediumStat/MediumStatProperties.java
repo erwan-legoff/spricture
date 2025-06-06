@@ -13,4 +13,6 @@ public class MediumStatProperties {
     private String appPassword = "app_stat";
     // quota in GO
     private long appQuota = 10L;
+    // percentage of quota allowed before blocking new uploads
+    private int quotaThresholdPercent = 90;
 }
