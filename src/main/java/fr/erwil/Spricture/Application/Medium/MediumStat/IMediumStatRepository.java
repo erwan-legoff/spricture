@@ -1,4 +1,12 @@
 package fr.erwil.Spricture.Application.Medium.MediumStat;
 
-public interface IMediumStatRepository {
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+
+import java.util.Optional;
+
+public interface IMediumStatRepository extends JpaRepository<MediumStat, Long> {
+    Optional<MediumStat> findByUser_Id(Long userId);
+
 }

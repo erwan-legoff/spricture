@@ -3,7 +3,7 @@ package fr.erwil.Spricture.Application.Medium.MediumStat.Dtos;
 import lombok.Builder;
 
 @Builder
-public record StorageUsageResponseDto(float newEstimatedUsageStorage, boolean isEstimatedStorageLimitReached,
-                                      float actualNewUsageStorage, boolean isActualStorageLimitReached,
-                                      float actualRemainingStorage) {
+public record StorageUsageResponseDto(long newEstimatedUsageStorage, boolean isEstimatedStorageLimitReached,
+                                      long actualNewUsageStorage, boolean isActualStorageLimitReached,
+                                      long actualRemainingStorage) {
 }

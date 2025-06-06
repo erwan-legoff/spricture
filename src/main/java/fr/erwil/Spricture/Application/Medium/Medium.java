@@ -36,6 +36,10 @@ public class Medium {
     @Setter
     private LocalDateTime deletedAt;
 
+    @Getter
+    @Setter
+    private long size;
+
     private LocalDateTime originallyCreatedAt;
     
     private String extension;
