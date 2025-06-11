@@ -32,20 +32,20 @@ public class JwtAuthenticationEndpoint implements AuthenticationEntryPoint {
         String     errorCode    = "AUTH_ERROR";
 
         switch (exception) {
-            case DisabledException _ -> {
+            case DisabledException x -> {
                 status      = HttpStatus.FORBIDDEN;
                 bearerError = "account_disabled";
                 errorCode   = "ACCOUNT_DISABLED";
             }
-            case AccountExpiredException _ -> {
+            case AccountExpiredException x -> {
                 bearerError = "account_expired";
                 errorCode   = "ACCOUNT_EXPIRED";
             }
-            case CredentialsExpiredException _ -> {
+            case CredentialsExpiredException x -> {
                 bearerError = "credentials_expired";
                 errorCode   = "CREDENTIALS_EXPIRED";
             }
-            case LockedException _ -> {
+            case LockedException x -> {
                 bearerError = "account_locked";
                 errorCode   = "ACCOUNT_LOCKED";
             }

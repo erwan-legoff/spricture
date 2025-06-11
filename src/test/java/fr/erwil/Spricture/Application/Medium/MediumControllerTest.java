@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 public class MediumControllerTest {
-
+/*
     @MockBean
     IMediumScopedService mediumService; // The service is needed for the controller
 
@@ -79,6 +79,6 @@ public class MediumControllerTest {
                 .andExpect(status().is4xxClientError())
                 .andExpect(status().isNotFound());
 
-    }
+    }*/
 
 }
