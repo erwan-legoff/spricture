@@ -1,71 +1,66 @@
 package fr.erwil.Spricture.Configuration.Security.JWT;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
-import org.springframework.security.authentication.*;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 
 @Component
-public class JwtAuthenticationEndpoint implements AuthenticationEntryPoint {
+public class JwtAuthenticationEndpoint
+        implements AuthenticationEntryPoint, AccessDeniedHandler {
 
-    private  final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper;
 
+    public JwtAuthenticationEndpoint(ObjectMapper mapper) {
+        this.mapper = mapper;                 // Spring injecte son ObjectMapper global
+    }
+
+    /* 401 – token absent ou invalide */
     @Override
-    public void commence(HttpServletRequest request,
-                         HttpServletResponse response,
-                         AuthenticationException exception) throws IOException, ServletException {
+    public void commence(HttpServletRequest req,
+                         HttpServletResponse res,
+                         AuthenticationException ex) throws IOException {
+        writeProblem(res, HttpStatus.UNAUTHORIZED,
+                "AUTH_ERROR", "invalid_token", ex.getMessage());
+    }
 
+    /* 403 – droits insuffisants */
+    @Override
+    public void handle(HttpServletRequest req,
+                       HttpServletResponse res,
+                       AccessDeniedException ex) throws IOException {
+        writeProblem(res, HttpStatus.FORBIDDEN,
+                "ACCESS_DENIED", "insufficient_scope", ex.getMessage());
+    }
 
-        HttpStatus status       = HttpStatus.UNAUTHORIZED;
-        String     bearerError  = "invalid_token";
-        String     errorCode    = "AUTH_ERROR";
+    /* Fabrique et écrit la réponse JSON RFC 7807 */
+    private void writeProblem(HttpServletResponse res,
+                              HttpStatus status,
+                              String errorCode,
+                              String bearerError,
+                              String detail) throws IOException {
 
-        switch (exception) {
-            case DisabledException x -> {
-                status      = HttpStatus.FORBIDDEN;
-                bearerError = "account_disabled";
-                errorCode   = "ACCOUNT_DISABLED";
-            }
-            case AccountExpiredException x -> {
-                bearerError = "account_expired";
-                errorCode   = "ACCOUNT_EXPIRED";
-            }
-            case CredentialsExpiredException x -> {
-                bearerError = "credentials_expired";
-                errorCode   = "CREDENTIALS_EXPIRED";
-            }
-            case LockedException x -> {
-                bearerError = "account_locked";
-                errorCode   = "ACCOUNT_LOCKED";
-            }
-            default -> {}
-        }
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(status, detail);
+        pd.setTitle("Authentication failure");
+        pd.setProperty("errorCode", errorCode);
+        pd.setProperty("timestamp", OffsetDateTime.now().toString());
 
+        res.setStatus(status.value());
+        res.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
+        res.setHeader("WWW-Authenticate",
+                "Bearer error=\"" + bearerError +
+                        "\", error_description=\"" + detail + "\"");
 
-
-        ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, exception.getMessage());
-        problem.setTitle("Authentication failure");
-        problem.setProperty("errorCode", errorCode);
-        problem.setProperty("timestamp", OffsetDateTime.now());
-
-
-        response.setStatus(status.value());
-        response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.setHeader("WWW-Authenticate",
-                "Bearer error=\"" + bearerError + "\", error_description=\"" + exception.getMessage() + "\"");
-
-        mapper.writeValue(response.getOutputStream(), problem);
+        mapper.writeValue(res.getOutputStream(), pd);
     }
 }

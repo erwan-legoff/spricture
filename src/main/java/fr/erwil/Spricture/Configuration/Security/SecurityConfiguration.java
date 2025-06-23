@@ -10,57 +10,74 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-@Component
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-    private final JwtAuthenticationEndpoint authenticationEndpoint;
-    private final JwtAuthenticationFilter authenticationFilter;
+    private final JwtAuthenticationEndpoint authEndpoint;
+    private final JwtAuthenticationFilter   authFilter;
 
-    public SecurityConfiguration(JwtAuthenticationEndpoint authenticationEndpoint, JwtAuthenticationFilter authenticationFilter) {
-        this.authenticationEndpoint = authenticationEndpoint;
-        this.authenticationFilter = authenticationFilter;
+    public SecurityConfiguration(JwtAuthenticationEndpoint authEndpoint,
+                                 JwtAuthenticationFilter authFilter) {
+        this.authEndpoint = authEndpoint;
+        this.authFilter   = authFilter;
     }
 
+    /* ─────────────────────────  PASS  ───────────────────────── */
+
     @Bean
-    public static PasswordEncoder passwordEncoder(){
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /* ───────────────────────── FILTER CHAIN ─────────────────── */
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                            CorsConfigurationSource corsConfigurationSource) throws Exception {
+                                            CorsConfigurationSource corsSource) throws Exception {
 
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource))
-            .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests((authorize)->{
-                authorize.requestMatchers("/api/auth/**").permitAll();
-                authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
-                authorize.requestMatchers(HttpMethod.POST, "/user").permitAll();
-                authorize.anyRequest().authenticated();
-            }).httpBasic(Customizer.withDefaults());
+                /* CORS & CSRF */
+                .cors(c -> c.configurationSource(corsSource))
+                .csrf(AbstractHttpConfigurer::disable)
 
-        http.exceptionHandling(exception ->exception.authenticationEntryPoint(authenticationEndpoint));
-        http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                /* Stateless JWT */
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                /* Routes publiques / protégées */
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user").permitAll()
+                        .anyRequest().authenticated())
+
+                /* Gestion 401 / 403 via le même bean */
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint(authEndpoint)
+                        .accessDeniedHandler(authEndpoint))
+
+                /* Pas de httpBasic (on est full JWT) */
+                .httpBasic(AbstractHttpConfigurer::disable);
+
+        /* Filtre JWT avant UsernamePasswordAuthenticationFilter */
+        http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-
     }
 
+    /* ───────────────────────── AUTH MANAGER ─────────────────── */
+
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration cfg)
+            throws Exception {
+        return cfg.getAuthenticationManager();
     }
 }
