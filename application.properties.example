@@ -47,3 +47,9 @@ medium.stat.app-email=app_stat@example.com
 medium.stat.app-quota=10
 medium.stat.quota-threshold-percent=90
 
+# User seeding configuration
+# If passwords are left empty, random strong passwords will be generated
+user.seed.admin-email=admin@example.com
+user.seed.admin-password=
+user.seed.default-password=
+

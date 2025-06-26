@@ -1,6 +1,7 @@
 package fr.erwil.Spricture.Application.User;
 
 import fr.erwil.Spricture.Application.User.Seeding.UserFactory;
+import fr.erwil.Spricture.Application.User.Seeding.UserSeedProperties;
 import fr.erwil.Spricture.Exceptions.User.UserAccountValidationException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +36,7 @@ public class UserServiceTest {
     @BeforeEach
     void setup() {
         Mockito.when(encoder.encode(Mockito.anyString())).thenAnswer(invocation -> invocation.getArgument(0));
-        userFactory = new UserFactory(encoder);
+        userFactory = new UserFactory(encoder, new UserSeedProperties());
     }
 
     @Test

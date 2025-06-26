@@ -7,6 +7,8 @@ import fr.erwil.Spricture.Configuration.Security.Utils.EncryptionUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import fr.erwil.Spricture.Application.User.Seeding.UserSeedProperties;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
@@ -15,9 +17,11 @@ import java.util.stream.IntStream;
 public class UserFactory implements IUserFactory {
 
     private final PasswordEncoder passwordEncoder;
+    private final UserSeedProperties seedProperties;
 
-    public UserFactory(PasswordEncoder passwordEncoder) {
+    public UserFactory(PasswordEncoder passwordEncoder, UserSeedProperties seedProperties) {
         this.passwordEncoder = passwordEncoder;
+        this.seedProperties = seedProperties;
     }
 
     @Override
@@ -26,8 +30,8 @@ public class UserFactory implements IUserFactory {
                 .pseudo("UserAdmin")
                 .name("Administrator")
                 .lastName("LastName")
-                .email("admin@company.com")
-                .password(passwordEncoder.encode("admin"))
+                .email(seedProperties.getAdminEmail())
+                .password(passwordEncoder.encode(seedProperties.getAdminPassword()))
                 .role(UserRole.ROLE_ADMIN)
                 .salt(EncryptionUtils.generateSalt())
                 .storageQuota(2L)
@@ -43,7 +47,7 @@ public class UserFactory implements IUserFactory {
                 .name("User")
                 .lastName("LastName")
                 .email("user@company.com")
-                .password(passwordEncoder.encode("user"))
+                .password(passwordEncoder.encode(seedProperties.getDefaultPassword()))
                 .role(UserRole.ROLE_USER)
                 .salt(EncryptionUtils.generateSalt())
                 .storageQuota(1L)
@@ -65,7 +69,7 @@ public class UserFactory implements IUserFactory {
                 .name("Random")
                 .lastName("User")
                 .email("random_" + uuid + "@example.com")
-                .password(passwordEncoder.encode("default"))
+                .password(passwordEncoder.encode(seedProperties.getDefaultPassword()))
                 .salt(EncryptionUtils.generateSalt())
                 .storageQuota(1L)
                 .build();
