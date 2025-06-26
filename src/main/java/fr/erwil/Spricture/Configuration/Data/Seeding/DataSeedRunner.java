@@ -6,10 +6,12 @@ import fr.erwil.Spricture.Application.User.User;
 import fr.erwil.Spricture.Application.User.UserRole;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@Order(2)
 public class DataSeedRunner implements CommandLineRunner {
 
     private final UserSeeder userSeeder;
