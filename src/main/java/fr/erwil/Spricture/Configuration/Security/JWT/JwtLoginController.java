@@ -25,7 +25,7 @@ public class JwtLoginController {
         this.authService = authService;
         this.userDetailsService = userDetailsService;
         this.isProd = !Arrays.asList(environment.getActiveProfiles()).contains("dev");
-        this.sameSite = this.isProd ? "Strict" : "Lax";
+        this.sameSite = this.isProd ? "None" : "Lax";
     }
 
 

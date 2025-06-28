@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
+@Profile("dev")
+@Order(1)
 @Component
-@Order(2)
 public class DataSeedRunner implements CommandLineRunner {
 
     private final UserSeeder userSeeder;
@@ -20,10 +20,9 @@ public class DataSeedRunner implements CommandLineRunner {
         this.userSeeder = userSeeder;
     }
 
-    @Profile("dev")
+
     @Override
     public void run(String... args) throws Exception {
-
         userSeeder.seed();
         System.out.println("Users seeded successfully.");
         System.out.println("Seeding finished.");
