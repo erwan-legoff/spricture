@@ -30,7 +30,7 @@ public class MediumController {
         this.mediumService=mediumService;
     }
 
-    @PreAuthorize("hasRole('USER')")
+
     @RequestMapping("/hello")
     public @ResponseBody String greeting() {
         return "Hello World!";

@@ -50,13 +50,10 @@ public class SprictureApplication {
 		// 1. Vérifier les propriétés de la DataSource
 		System.out.println("DEBUG: spring.datasource.url = " + env.getProperty("spring.datasource.url"));
 		System.out.println("DEBUG: spring.datasource.username = " + env.getProperty("spring.datasource.username"));
-		// ATTENTION : Éviter de logger le mot de passe en production, mais utile pour le debug temporaire
-		// System.out.println("DEBUG: spring.datasource.password = " + env.getProperty("spring.datasource.password"));
 
 		// 2. Vérifier si les variables d'environnement brutes sont vues
 		System.out.println("DEBUG: DB_URL (raw env var) = " + env.getProperty("DB_URL"));
 		System.out.println("DEBUG: DB_USER (raw env var) = " + env.getProperty("DB_USER"));
-		System.out.println("DEBUG: DB_PASS (raw env var) = " + env.getProperty("DB_PASS"));
 
 		// 3. Vérifier le profil actif
 		String[] activeProfiles = env.getActiveProfiles();
@@ -67,14 +64,6 @@ public class SprictureApplication {
 		}
 		System.out.println("DEBUG: spring.profiles.active = " + env.getProperty("spring.profiles.active"));
 		System.out.println("DEBUG: SPRING_PROFILES_ACTIVE (raw env var) = " + env.getProperty("SPRING_PROFILES_ACTIVE"));
-
-		// 4. Vérifier le nom de l'application (pour s'assurer que d'autres variables sont bien lues)
-		System.out.println("DEBUG: spring.application.name = " + env.getProperty("spring.application.name"));
-		System.out.println("DEBUG: SPRING_APPLICATION_NAME (raw env var) = " + env.getProperty("SPRING_APPLICATION_NAME"));
-
-		// 5. Vérifier le port d'écoute (si Render attend un port spécifique)
-		System.out.println("DEBUG: server.port = " + env.getProperty("server.port"));
-		System.out.println("DEBUG: PORT (Render specific env var) = " + env.getProperty("PORT"));
 
 		System.out.println("--- End Spring Boot Environment Debug ---");
 	}
