@@ -1,6 +1,5 @@
 package fr.erwil.Spricture.Configuration.Security.JWT;
 
-import fr.erwil.Spricture.Application.User.Dtos.Responses.GetMeResponseDto;
 import fr.erwil.Spricture.Configuration.Security.Dtos.LoginDto;
 import fr.erwil.Spricture.Configuration.Security.IAuthService;
 import fr.erwil.Spricture.Configuration.Security.UserDetails.UserDetailsServiceImpl;
@@ -9,7 +8,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -31,14 +29,14 @@ public class JwtLoginController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
         String token = authService.login(loginDto);
         ResponseCookie cookie = buildJwtCookie(token, 60 * 60 * 24);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .header("Set-Cookie", cookie.toString())
-                .build();
+                .body(token);
+
     }
 
     @GetMapping("/verify")
@@ -72,6 +70,7 @@ public class JwtLoginController {
         return ResponseCookie.from("jwt", token)
                 .httpOnly(true)
                 .secure(isProd)
+                .partitioned(isProd)
                 .sameSite(this.sameSite)
                 .path("/")
                 .maxAge(maxAge)
