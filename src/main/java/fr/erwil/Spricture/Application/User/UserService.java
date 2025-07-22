@@ -78,12 +78,6 @@ public class UserService implements IUserService {
             );
         }
 
-        if (!status.emailHasBeenValidated()) {
-            throw new UserAccountValidationException(
-                    "Cannot validate an account whose email is not validated. Current status: " + status
-            );
-        }
-
         if (status.canLogin()) {
             throw new UserAccountValidationException(
                     "User is already validated and can log in. Current status: " + status
