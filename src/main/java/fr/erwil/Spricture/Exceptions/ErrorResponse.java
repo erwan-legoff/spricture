@@ -1,7 +1,6 @@
 package fr.erwil.Spricture.Exceptions;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 
 import java.time.Instant;
 
@@ -10,17 +9,34 @@ public record ErrorResponse(
         int status,
         String error,
         String message,
-        String path
+        String path,
+        String code // Code applicatif stable et toujours présent
 ) {
-    public ErrorResponse(int status, String error, String message, String path) {
-        this(Instant.now(), status, error, message, path);
+
+    // Constructeur principal
+    public ErrorResponse(int status, String error, String message, String path, String code) {
+        this(Instant.now(), status, error, message, path, code);
     }
 
-    public ErrorResponse(BaseException exception, String path){
-        this(exception.getHttpStatus().value(),exception.getHttpStatus().name(), exception.getMessage(), path);
+    // Pour les exceptions métier (héritent de BaseException avec getCode())
+    public ErrorResponse(BaseException exception, String path) {
+        this(
+                exception.getHttpStatus().value(),
+                exception.getHttpStatus().name(),
+                exception.getMessage(),
+                path,
+                exception.getCode()
+        );
     }
 
-    public  ErrorResponse(HttpStatus httpStatus, Exception exception, String path){
-        this(httpStatus.value(), httpStatus.name(), exception.getMessage(), path);
+    // Pour les exceptions non métier : on force un code par défaut
+    public ErrorResponse(HttpStatus httpStatus, Exception exception, String path) {
+        this(
+                httpStatus.value(),
+                httpStatus.name(),
+                exception.getMessage(),
+                path,
+                "UNEXPECTED_ERROR"
+        );
     }
 }

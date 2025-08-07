@@ -1,9 +1,12 @@
 package fr.erwil.Spricture.Exceptions;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public class BaseException extends RuntimeException {
-   private final HttpStatus httpStatus;
+
+    private final HttpStatus httpStatus;
 
     public BaseException(HttpStatus httpStatus, String message) {
         super(message);
@@ -19,12 +22,17 @@ public class BaseException extends RuntimeException {
         super(message, cause);
         this.httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
     }
+
     public BaseException(String message) {
         super(message);
         this.httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
-    public HttpStatus getHttpStatus() {
-        return httpStatus;
+    /**
+     * Code applicatif à destination du front.
+     * Les sous-classes doivent override pour fournir un code spécifique.
+     */
+    public String getCode() {
+        return "UNEXPECTED_ERROR";
     }
 }

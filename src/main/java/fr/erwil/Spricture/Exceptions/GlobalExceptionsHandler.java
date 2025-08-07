@@ -1,7 +1,5 @@
 package fr.erwil.Spricture.Exceptions;
 
-import fr.erwil.Spricture.Exceptions.Medium.MediumNotFoundException;
-import fr.erwil.Spricture.Exceptions.Medium.MediumProcessingException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -19,7 +17,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionsHandler {
 
-
     private static final Logger log = LogManager.getLogger(GlobalExceptionsHandler.class);
 
     @ExceptionHandler(BaseException.class)
@@ -36,8 +33,13 @@ public class GlobalExceptionsHandler {
         log.error("MaxUploadSizeExceededException at {}: {}", path, exception.getMessage(), exception);
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        ErrorResponse errorResponse = new ErrorResponse(status.value(), status.getReasonPhrase(),
-                "File size exceeds the maximum allowed limit", path);
+        ErrorResponse errorResponse = new ErrorResponse(
+                status.value(),
+                status.getReasonPhrase(),
+                "File size exceeds the maximum allowed limit",
+                path,
+                "UPLOAD_TOO_LARGE"
+        );
 
         return new ResponseEntity<>(errorResponse, status);
     }
@@ -54,11 +56,13 @@ public class GlobalExceptionsHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 message,
-                path
+                path,
+                "VALIDATION_ERROR"
         );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<ErrorResponse> handleDisabledException(DisabledException exception, WebRequest request){
         String path = ((ServletWebRequest) request).getRequest().getRequestURI();
@@ -67,7 +71,8 @@ public class GlobalExceptionsHandler {
                 HttpStatus.CONFLICT.value(),
                 HttpStatus.CONFLICT.getReasonPhrase(),
                 message,
-                path
+                path,
+                "USER_ACCOUNT_DISABLED"
         );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
@@ -80,8 +85,14 @@ public class GlobalExceptionsHandler {
         log.error("Unhandled exception at {}: {}", path, exception.getMessage(), exception);
 
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        ErrorResponse errorResponse = new ErrorResponse(status, exception, path);
+        ErrorResponse errorResponse = new ErrorResponse(
+                status.value(),
+                status.getReasonPhrase(),
+                exception.getMessage(),
+                path,
+                "UNEXPECTED_ERROR"
+        );
+
         return new ResponseEntity<>(errorResponse, status);
     }
-
 }

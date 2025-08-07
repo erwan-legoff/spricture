@@ -44,8 +44,11 @@ public class UserService implements IUserService {
     @Transactional
     @Override
     public CreateUserResponseDto create(CreateUserRequestDto user) {
-        try {
+            if (userRepository.existsByEmail(user.getEmail())) {
+                throw new UserAlreadyExistsException(user.getEmail());
+            }
             User userToCreate = CreateUserAdapter.getUser(user,passwordEncoder.encode(user.getRawPassword()));
+
             userToCreate.setStatus(UserStatus.CREATED);
             userToCreate.setSalt(EncryptionUtils.generateSalt());
             userToCreate.setStorageQuota(userProperties.getDefaultQuota()*1000*1000*1000);
@@ -53,9 +56,6 @@ public class UserService implements IUserService {
             mediumStatService.create(createdUser.getId());
 
             return CreateUserResponseDto.builder().userCreated(true).build();
-        } catch (Exception e) {
-            throw new UserCreationException("Error while creating user", e);
-        }
     }
 
     @Override
