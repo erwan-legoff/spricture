@@ -16,9 +16,10 @@ public class Album extends AbstractEntity {
     @Id
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 255)
     private String title;
 
+    @Column(length = 1000)
     private String description;
 
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
