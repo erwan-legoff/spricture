@@ -7,11 +7,11 @@ import org.springframework.http.HttpStatus;
  * Levée lorsqu’on tente de créer un utilisateur déjà existant.
  */
 @Getter
-public class UserAlreadyExistsException extends UserCreationException {
+public class UserMailAlreadyExistsException extends UserCreationException {
 
-    private static final String CODE = "USER_ALREADY_EXISTS";
+    private static final String CODE = "USER_MAIL_ALREADY_EXISTS";
 
-    public UserAlreadyExistsException(String email) {
+    public UserMailAlreadyExistsException(String email) {
         super(
                 HttpStatus.CONFLICT,                       // 409
                 String.format("[%s] User with email '%s' already exists", CODE, email)

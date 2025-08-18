@@ -5,11 +5,8 @@ import fr.erwil.Spricture.Application.User.Dtos.Adapters.CreateUserAdapter;
 import fr.erwil.Spricture.Application.User.Dtos.Adapters.GetManyUsersResponseAdapter;
 import fr.erwil.Spricture.Application.User.Dtos.Requests.CreateUserRequestDto;
 import fr.erwil.Spricture.Application.User.Dtos.Responses.CreateUserResponseDto;
-import fr.erwil.Spricture.Application.User.Dtos.Responses.GetMeResponseDto;
 import fr.erwil.Spricture.Application.User.Dtos.Responses.GetUserResponseDto;
 import fr.erwil.Spricture.Configuration.FrontendProperties;
-import fr.erwil.Spricture.Configuration.Security.IAuthService;
-import fr.erwil.Spricture.Configuration.Security.UserDetails.CustomUserDetails;
 import fr.erwil.Spricture.Configuration.Security.Utils.EncryptionUtils;
 import fr.erwil.Spricture.Exceptions.User.*;
 import fr.erwil.Spricture.Tools.Mail.MailService;
@@ -45,8 +42,11 @@ public class UserService implements IUserService {
     @Override
     public CreateUserResponseDto create(CreateUserRequestDto user) {
             if (userRepository.existsByEmail(user.getEmail())) {
-                throw new UserAlreadyExistsException(user.getEmail());
+                throw new UserMailAlreadyExistsException(user.getEmail());
             }
+        if (userRepository.existsByPseudo(user.getPseudo())) {
+            throw new UserPseudoAlreadyExistsException(user.getEmail());
+        }
             User userToCreate = CreateUserAdapter.getUser(user,passwordEncoder.encode(user.getRawPassword()));
 
             userToCreate.setStatus(UserStatus.CREATED);
