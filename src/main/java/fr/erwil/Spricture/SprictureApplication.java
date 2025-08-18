@@ -45,27 +45,22 @@ public class SprictureApplication {
 
 	@PostConstruct
 	public void logApplicationProperties() {
-		System.out.println("--- Spring Boot Environment Debug ---");
-
-		// 1. Vérifier les propriétés de la DataSource
-		System.out.println("DEBUG: spring.datasource.url = " + env.getProperty("spring.datasource.url"));
-		System.out.println("DEBUG: spring.datasource.username = " + env.getProperty("spring.datasource.username"));
-
-		// 2. Vérifier si les variables d'environnement brutes sont vues
-		System.out.println("DEBUG: DB_URL (raw env var) = " + env.getProperty("DB_URL"));
-		System.out.println("DEBUG: DB_USER (raw env var) = " + env.getProperty("DB_USER"));
-
-		// 3. Vérifier le profil actif
-		String[] activeProfiles = env.getActiveProfiles();
-		if (activeProfiles.length > 0) {
-			System.out.println("DEBUG: Active Spring Profiles = " + String.join(", ", activeProfiles));
-		} else {
-			System.out.println("DEBUG: No active Spring profiles (defaulting)");
-		}
-		System.out.println("DEBUG: spring.profiles.active = " + env.getProperty("spring.profiles.active"));
-		System.out.println("DEBUG: SPRING_PROFILES_ACTIVE (raw env var) = " + env.getProperty("SPRING_PROFILES_ACTIVE"));
-
-		System.out.println("--- End Spring Boot Environment Debug ---");
+//		System.out.println("--- Spring Boot Environment Debug ---");
+//
+//		// 1. Vérifier les propriétés de la DataSource
+//		System.out.println("DEBUG: spring.datasource.url = " + env.getProperty("spring.datasource.url"));
+//
+//		// 3. Vérifier le profil actif
+//		String[] activeProfiles = env.getActiveProfiles();
+//		if (activeProfiles.length > 0) {
+//			System.out.println("DEBUG: Active Spring Profiles = " + String.join(", ", activeProfiles));
+//		} else {
+//			System.out.println("DEBUG: No active Spring profiles (defaulting)");
+//		}
+//		System.out.println("DEBUG: spring.profiles.active = " + env.getProperty("spring.profiles.active"));
+//		System.out.println("DEBUG: SPRING_PROFILES_ACTIVE (raw env var) = " + env.getProperty("SPRING_PROFILES_ACTIVE"));
+//
+//		System.out.println("--- End Spring Boot Environment Debug ---");
 	}
 
 }
