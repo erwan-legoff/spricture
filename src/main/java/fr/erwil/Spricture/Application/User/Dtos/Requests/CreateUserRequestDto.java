@@ -24,12 +24,14 @@ public class CreateUserRequestDto {
     private String email;
 
     @NotBlank
-    @Size(min = 6)
+    @Size(min = 6, max = 30)
     private String rawPassword;
 
+    @Size(min = 1, max = 60)
     @NotBlank
     private String name;
 
+    @Size(min = 1, max = 100)
     @NotBlank
     private String lastName;
 
