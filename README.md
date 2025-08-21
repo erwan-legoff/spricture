@@ -1,4 +1,4 @@
-**ALPHA** : A project to learn Spring Boot and Nuxt 3.
+**BETA** : A project to learn Spring Boot and Nuxt 3.
 
 **IMPORTANT** : it's in active development, and it's a personal project used to learn Spring Boot and Nuxt 3.
 You can use it at your own risk but I can't provide any garanty whatsoever.
