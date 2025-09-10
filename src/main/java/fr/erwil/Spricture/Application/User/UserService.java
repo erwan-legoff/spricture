@@ -11,6 +11,9 @@ import fr.erwil.Spricture.Configuration.Security.Utils.EncryptionUtils;
 import fr.erwil.Spricture.Exceptions.User.*;
 import fr.erwil.Spricture.Tools.Mail.MailService;
 import jakarta.transaction.Transactional;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 @Service
@@ -28,14 +32,17 @@ public class UserService implements IUserService {
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final FrontendProperties frontendProperties;
+    // TODO : faire un UserEventPublisher
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public UserService(IMediumStatService mediumStatService, UserProperties userProperties, IUserRepository userRepository, PasswordEncoder passwordEncoder, MailService mailService, FrontendProperties frontendProperties) {
+    public UserService(IMediumStatService mediumStatService, UserProperties userProperties, IUserRepository userRepository, PasswordEncoder passwordEncoder, MailService mailService, FrontendProperties frontendProperties, KafkaTemplate<String, String> kafkaTemplate) {
         this.mediumStatService = mediumStatService;
         this.userProperties = userProperties;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.mailService = mailService;
         this.frontendProperties = frontendProperties;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Transactional
@@ -54,9 +61,12 @@ public class UserService implements IUserService {
             userToCreate.setStorageQuota(userProperties.getDefaultQuota()*1000*1000*1000);
             User createdUser = userRepository.save(userToCreate);
             mediumStatService.create(createdUser.getId());
-
+            kafkaTemplate.send("user-created",createdUser.getEmail());
             return CreateUserResponseDto.builder().userCreated(true).build();
     }
+
+
+
 
     @Override
     public List<GetUserResponseDto> getMany() {
