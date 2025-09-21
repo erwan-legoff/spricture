@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,7 @@ import java.util.stream.Stream;
 @Primary
 @Qualifier("s3")
 @Service
+@ConditionalOnProperty(name = "storage.type", havingValue = "s3", matchIfMissing = true)
 public class UUIDFileStorageS3 implements IUuidFileStorage {
     private static final Logger log = LogManager.getLogger(UUIDFileStorageS3.class);
     private final S3Client s3Client;

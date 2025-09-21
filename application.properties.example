@@ -17,6 +17,10 @@ spring.servlet.multipart.max-request-size=20MB
 
 # File storage location
 file.storage.location=./medias
+file.storage.base-url=http://localhost:8080/files
+
+# Storage type: 's3' or 'local'
+storage.type=s3
 
 # Security Config
 security.jwt.secret-key=

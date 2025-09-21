@@ -17,5 +17,6 @@ public class FileStorageProperties {
 
     // Default value
     private String location = "/medias";
+    private String baseUrl = "http://localhost:8080/files";
 
 }
